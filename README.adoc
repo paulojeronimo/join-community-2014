@@ -1,0 +1,120 @@
+= Repositório com documentos e slides para o evento Join Community 2014
+:author: Paulo Jerônimo
+:email: pj@paulojeronimo.info
+
+Esse repositório contém minha link:submissao.adoc[proposta de submissão de apresentação para o evento Join Community 2014] assim como os link:onstage.html#slides.html[slides da palestra] e outros documentos relacionados.
+
+Obviamente, o trabalho de algumas outras pessoas foi utilizado, por mim, como base para criar esse repositório. Segue o passo a passo que desenvolvi para a sua criação, utilizando o http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html[Fedora 20 que tenho instalado em meu MacBook]:
+
+Baixei o projeto http://github.com/arun-gupta/wildfly-deck[wildfly-deck], do http://twitter.com/arungupta[Arun Gupta], pois ele já estava preparado com algumas configurações que eu queria utilizar. Então, fiz apenas alguns ajustes na estrutura de diretórios e apaguei alguns arquivos que eu não precisaria:
+[source,bash]
+----
+$ cd ~/Projects/github.com/paulojeronimo
+$ git clone --depth 1 https://github.com/arun-gupta/wildfly-deck.git join-community-2014
+$ cd !$
+$ mv deck/* .
+$ rm -rf README.md LICENSE .git deck/ zh-cn/ slides.{html,pdf}
+----
+
+Instalei o RVM, o Ruby e, por fim, o Asciidoctor:
+[source,bash]
+----
+$ curl -sSL https://get.rvm.io | bash -s stable
+$ source ~/.rvm/scripts/rvm
+$ rvm install 2.1.1
+$ gem install asciidoctor
+----
+
+Antes de gerar os slides com o Asciidoctor, utilizando os comandos mais abaixo, dois +gems+ precisaram ser instalados:
+[source,bash]
+----
+$ gem install tilt
+$ gem install slim
+----
+
+Gerei os slides com o Asciidoctor:
+
+TIP: Não foi preciso instalar o dzslides e nem o asciidoctor-backends pois eles já existiam e estavam configurados na estrutura clonada do projeto wildfly-deck.
+[source,bash]
+----
+$ asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc
+----
+
+Baixei e compilei o projeto deck2pdf para fazer a geração dos slides no formato PDF:
+[source,bash]
+----
+$ pushd ~/Projects/github.com/
+$ git clone https://github.com/melix/deck2pdf.git
+$ pushd deck2pdf/
+----
+
+Instalei o JDK 8. Em seguida, executei os comandos a seguir (que precisam dele, especificamente):
+[source,bash]
+----
+$ export JAVA_HOME=/usr/java/latest
+$ ./gradlew distZip
+----
+
+TIP: Ao executar esses comandos acessando a Internet através de um proxy, tive que executar a seguinte linha antes do último comando:
+[source,bash]
+----
+$ export JAVA_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=3128"
+----
+
+Instalei os binários gerados como resultado da compilação/ construção do deck2pdf:
+[source,bash]
+----
+$ mkdir -p ~/Projects/Java
+$ unzip build/distributions/deck2pdf-0.1-SNAPSHOT.zip -d !$
+$ chmod +x !-2:2/deck2pdf-0.1-SNAPSHOT/bin/deck2pdf
+$ export PATH=!-3:2/deck2pdf-0.1-SNAPSHOT/bin:$PATH
+$ popd
+$ !!
+----
+
+Regerei o PDF dos slides criados pelo Arun, para testar a instalação:
+[source,bash]
+----
+$ asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides -a linkcss -a data-uri slides.adoc
+$ deck2pdf --profile=dzslides slides.html slides.pdf
+----
+
+Funcionou! A versão PDF dos slides foi gerada. Agora, a instalação das ferramentas para a edição dos slides estava ok!
+
+Prossegui removendo as imagens existentes no diretório +images+:
+[source,bash]
+----
+$ rm -rf images/*
+----
+
+Criei um pequeno script, que executo quando estou editando o +slides.adoc+ dentro do vim (comando +:!./slides.build.sh+):
+
+[source,bash]
+----
+$ f=slides.build.sh; cat > $f <<EOF
+#!/bin/bash
+
+asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc
+EOF
+$ chmod +x $f
+----
+
+Segui em frente editando o arquivo link:slides.adoc[] e regerando o link:slides.html[] com as minhas informações até a sua conclusão: 
+[source,bash]
+----
+$ vim slides.doc
+----
+
+IMPORTANT: Os passos acima estão sendo repetidamente executados até poucos dias antes do evento (31/Maio/2014). 
+
+Criei o repositório no GitHub, o repositório local, e fiz o push dos arquivos que criei:
+[source,bash]
+----
+$ git init .
+$ git add .
+$ git commit -m 'commit inicial'
+$ git remote add origin https://github.com/paulojeronimo/join-community-2014.git
+$ git push -u origin master
+----
+
+IMPORTANT: Você poderá acompanhar o desenvolvimento e o histórico desse repositório aqui no GitHub! :-)

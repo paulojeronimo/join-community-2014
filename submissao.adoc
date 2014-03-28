@@ -1,0 +1,61 @@
+= Proposta de apresentação no Join Community 2014
+:author: Paulo Jerônimo
+:email: pj@paulojeronimo.info
+:toc:
+:numbered:
+
+== Título
+
+Criando e publicando sites no http://pages.github.com/[GitHub Pages] com http://asciidoctor.org[Asciidoctor] e http://awestruct.org[Awestruct].
+
+== Resumo
+
+Sites estáticos construídos apenas com HTML5, CSS3 e JavaScript podem ser extremamente úteis na criação de sites pessoais, blogs, documentação de projetos, livros, etc. Nessa apresentação você aprenderá a utilizar os softwares livres Asciidoctor e Awestruct para construir um website completo. Em seguida, hospedará esse website, gratuitamente e opcionalmente utilizando seu próprio domínio, no GitHub Pages. Saberá, ainda, como utilizar a infraestrutura provida pelo GitHub para possibilitar a colaboração de outras pessoas na construção de seu site.
+
+== Descrição
+
+O Asciidoctor é uma implementação em Ruby do http://www.methods.co.nz/asciidoc/[AsciiDoc]. Esse último, por sua vez, é escrito em Python. AsciiDoc, além de ser uma ferramenta, é um formato textual com marcações, muito utilizado para a criação de livros, wikis, sites estáticos, etc. Dessa forma, você pode criar documentos em qualquer editor de textos que deseje e gerar, até mesmo, documentos complexos como livros. Nada melhor que exemplos para poder apresentar o poder desse formato. Segue, então, uma pequena lista:
+
+* Livros:
+** No Brasil, um excelente exemplo de uso do formato AsciiDoc é o site de publicação de livros da Universidade Federal da Paraíba (UFPB).  https://github.com/edusantana[Eduardo de Santanta] é autor de um livro completo explicando todo o http://producao.virtual.ufpb.br/books/edusantana/producao-computacao-ead-ufpb/livro/livro.chunked/index.html[processo ágil de produção de livros da UFPB] e, nesse processo, ele utiliza o AsciiDoc e o GitHub como infraestrutura para que dezenas de outros autores possam produzir http://producao.virtual.ufpb.br/books/[livros para os cursos oferecidos pela UFPB].
+* Slides em HTML5, acessíveis via qualquer browser (decente):
+** http://mojavelinux.github.io/decks/asciidoc-with-pleasure/rwx2012/index.html[Drop the angled brackets. Write (Ascii)Docs with pleasure!] https://github.com/mojavelinux/decks/blob/master/asciidoc-with-pleasure/slides.asciidoc[(source)];
+** http://mojavelinux.github.io/decks/docs-workshop/rwx2013/index.html[Easier Documentation, Simpler Websites and Faster Collaboration];
+** http://mojavelinux.github.io/decks/discover-zen-writing-asciidoc/rwx2013/index.html[Discover the ☯ of ✍ (Ascii)Docs] https://github.com/mojavelinux/decks/blob/master/discover-zen-writing-asciidoc-lightning/slides-rwx2013.adoc[(source)]
+** http://htmlpreview.github.io/?https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.html[What's new in WildFly 8?] https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.adoc[(source)] https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.pdf?raw=true[(pdf)]
+
+O Awestruct é um framework para a criação de sites HTML estáticos. Ele é inspirado no https://github.com/jekyll/jekyll[Jekyll], a _engine_ por trás do GitHub Pages. O Awestruct torna trivial a criação de sites utilizando ferramentas como o http://compass-style.org[Compass], http://daringfireball.net/projects/markdown/syntax[Markdown] e http://haml-lang.com[Haml], além, é claro, do Asciidoctor. Para exemplificar o uso atual do Awestruct, segue alguns casos (dentre vários):
+
+* Sites de projetos:
+** É claro que o https://github.com/awestruct/awestruct.org[código do site do projeto Awestruct] está disponível no GitHub e é desenvolvido utilizando o próprio Awestruct;
+** O http://asciidoctor.org[site do projeto Asciidoctor] também é escrito com o Awestruct (obviamente no formato AsciiDoc) e https://github.com/paulojeronimo/asciidoctor.org[seu código] está disponível no GitHub.
+** O http://arquillian.org[Arquillian] é um framework para testes de aplicações Java EE. Seu site é frequentemente atualizado por vários participantes do projeto, de forma colaborativa, e https://github.com/arquillian/arquillian.github.com[seu código] está disponível no GitHub;
+** O http://infinispan.org/[Infinispan], uma plataforma para data grid, também é um bom exemplo de site gerado com o Awestruct.  https://github.com/infinispan/infinispan.github.io[Seu código] está disponível no GitHub;
+* Sites pessoais/blogs:
+** O http://www.emmanuelbernard.com/[site de Emmanuel Bernard], autor do livro http://www.emmanuelbernard.com/books/hsia/[Hibernate Search in Action], líder da especificação "Bean Validation" e membro da especificação "Java Persistence", ambas do JCP. Todo o https://github.com/emmanuelbernard/emmanuelbernard.com[código de seu site] pode ser baixado do GitHub;
+** O http://mgreau.com/[site de Maxime Gréau], autor de um http://mgreau.com/books.html[livro em francês sobre o Apache Maven 3]. O https://github.com/mgreau/mgreau.github.io[código de seu site] também está disponível no GitHub;
+
+O GitHub Pages é um módulo do GitHub que possibilita a hospedar um site completo a partir de um repositório. É só editar e fazer um _push_ do repositório para que ele possa estar disponível em uma URL pública. O GitHub Pages também possibilita a configuração dessa URL para um domínio personalizado.  http://twitter.com/mojavelinux[Dan Allen], autor do livro http://mojavelinux.com/seaminaction[Seam in Action], iniciou o trabalho de criação do Asciidoctor. Hoje esse projeto conta mais de vinte pessoas contribuindo em https://github.com/asciidoctor/asciidoctor[sua conta no GibHub] e é utilizado por este como ferramenta de renderização de documentos no formato AsciiDoc. Recentemente, em dezembro do ano passado, https://therichwebexperience.com/conference/fort_lauderdale/2013/12/session?id=30320[Dan Allen montou um workshop para o evento _The Rich Web Experience 2013_ (RWX)], onde ele apresentou como utilizar o Asciidoctor e o Awestruct para criar e publicar sites no GitHub Pages. Seus slides http://mojavelinux.github.io/decks/[estão disponíveis] e são a principal referência para os tópicos desta apresentação.
+
+Essa palestra apresentará um passo a passo, em português, para a criação de sites utilizando o Awestruct e o Asciidoctor. Além disso, também mostrará os resultados da migração de um site estático em funcionamento para a utilização dessas ferramentas. Por fim, você saberá como é possível utilizar a infraesturutra do GitHub para possibilitar que outras pessoas colaborem na construção de seu site.
+
+== Extras
+Se você quiser replicar o que será apresentado, precisará montar um ambiente similar para a execução das ferramentas citadas, que rodam em Linux, OS X e até mesmo aquele outro ... qual é mesmo o nome? ... ;). Então, como tópicos extras (além do escopo da apresentação) você verá: 
+
+* Como instalar/configurar o http://fedoraproject.org[Fedora] 20 com o mínimo necessário para montar um ambiente de execução para essas ferramentas;
+* Virtualização, com o uso do http://virtualbox.org[VirtualBox];
+* A instalação do Ruby via https://rvm.io/[RVM];
+* O uso de http://www.vim.org/[Vim], http://git-scm.com/[Git], http://curl.haxx.se/[curl], http://lynx.browser.org/[lynx], http://tmux.sourceforge.net/[tmux] e tunelamento SSH;
+
+Tudo isso, em linhas de comando! \o/
+
+== Slides
+
+Os slides dessa apresentação (link:slides.html[]) também são escritos no formato AsciiDoc (link:slides.adoc[]) e, em seguida, convertidos para o formato http://paulrouget.com/dzslides/[DZSlides]. Esse formato é utilizado para criar slides apenas com o uso de HTML5 e CSS3 tornando, assim, a apresentação visível em qualquer browser compatível. Além disso, pelo uso da ferramenta https://github.com/melix/deck2pdf[deck2pdf], é possível converter os slides desse formato para o formato PDF (link:slides.pdf[]).
+
+== Links extras
+
+. http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/
+. http://asciidoctor.org/docs/asciidoc-recommended-practices/
+. http://www.methods.co.nz/asciidoc/ 
+. http://powerman.name/doc/asciidoc

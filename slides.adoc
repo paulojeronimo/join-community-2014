@@ -1,0 +1,39 @@
+= Criando e publicando sites no GitHub Pages com Asciidoctor e Awestruct
+Paulo Jerônimo; @paulojeronimo
+include::attributes.adoc[]
+
+:experimental:
+:toc2:
+:sectanchors:
+:idprefix:
+:idseparator: -
+:icons: font
+:dzslides-transition: fade
+:source-highlighter: coderay
+
+[.topic.source]
+== Paulo Jerônimo
+
+====
+* Autor de cursos e materiais instrucionais:
+** Linux, Java EE, http://j.mp/jboss-em-producao[JBoss em Produção], WildFly;
+** Site atual: http://paulojeronimo.info;
+** Blog (antigo, não atualizável, mantido apenas por razões históricas): http://ladoservidor.com;
+* Analista de suporte na empresa http://mais2x.com.br/[+2X]:
+** Atualmente, suportando ambiente JBoss em produção na Caixa Econômica Federal;
+* Triatleta, Ironman:
+** Próximo (2º): 29/Jun/2014 - Nice/França;
+** Natação/Ciclismo/Corrida: 3,8/180/42,195 Km; Prazo: 17 horas;
+====
+
+[NOTE ]
+[role="speaker"]
+====
+* Sempre me perguntam sobre as distâncias de um Ironman. Então, é melhor deixá-las escritas! :D
+====
+
+[.topic.ending, hrole="name"]
+== Paulo Jerônimo
+
+[.footer]
+[icon-twitter]'{zwsp}' @paulojeronimo
