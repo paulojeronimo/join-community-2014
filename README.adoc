@@ -1,8 +1,8 @@
-= Repositório com documentos e slides para o evento Join Community 2014
+= Documentos e slides para o evento Join Community 2014
 :author: Paulo Jerônimo
 :email: pj@paulojeronimo.info
 
-Esse repositório contém minha link:submissao.adoc[proposta de submissão de apresentação para o evento Join Community 2014] assim como os link:onstage.html#slides.html[slides da palestra] e outros documentos relacionados.
+Esse repositório contém minha link:submissao.adoc[proposta de submissão de apresentação para o evento Join Community 2014] assim como os http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[slides da palestra] e outros documentos relacionados.
 
 Obviamente, o trabalho de algumas outras pessoas foi utilizado, por mim, como base para criar esse repositório. Segue o passo a passo que desenvolvi para a sua criação, utilizando o http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html[Fedora 20 que tenho instalado em meu MacBook]:
 
@@ -34,7 +34,7 @@ $ gem install slim
 
 Gerei os slides com o Asciidoctor:
 
-TIP: Não foi preciso instalar o dzslides e nem o asciidoctor-backends pois eles já existiam e estavam configurados na estrutura clonada do projeto wildfly-deck.
+TIP: Não foi preciso instalar o https://github.com/mojavelinux/dzslides[dzslides] e nem o https://github.com/asciidoctor/asciidoctor-backends[asciidoctor-backends] pois eles já existiam e estavam configurados na estrutura clonada do projeto wildfly-deck.
 [source,bash]
 ----
 $ asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc

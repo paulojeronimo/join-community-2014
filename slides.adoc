@@ -32,6 +32,9 @@ include::attributes.adoc[]
 * Sempre me perguntam sobre as distâncias de um Ironman. Então, é melhor deixá-las escritas! :D
 ====
 
+[.topic.intro]
+== Slides em construção!
+
 [.topic.ending, hrole="name"]
 == Paulo Jerônimo
 
