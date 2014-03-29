@@ -1,0 +1,241 @@
+= Guia, passo a passo
+:author: Paulo Jerônimo
+:email: pj@paulojeronimo.info
+:toc:
+:numbered:
+
+== Baixando o ISO de instalação do Fedora 20
+
+== Instalando o VirtualBox
+
+== Criando o seu mirror local do Fedora 20
+
+== Criando a vm-fedora e fazendo, nela, a instalação do Fedora 20
+[source,bash]
+----
+$ pwd
+/home/pj/Projects/paulojeronimo/github.com/mirrors
+$ FEDORA_ISO=/data/mirrors/Fedora-20-x86_64/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso Fedora/20/x86_64/vm/vbox
+$ VBoxManage startvm vm-fedora
+----
+
+== Fazendo a pós-instalação da VM
+[source,bash]
+----
+$ sudo yum -y install tree vim tmux
+$ sudo yum -y group install c-development development-tools
+$ sudo package-cleanup -y --oldkernels --count=1
+$ sudo shutdown -h now
+----
+
+== Tirando um snapshot e reiniciando a VM
+[source,bash]
+----
+$ VBoxManage snapshot vm-fedora take fedora-pos-install
+$ VBoxManage startvm vm-fedora
+----
+
+== Configurando opcionais: teclado, cores no shell e proxy
+[source,bash]
+----
+$ sudo loadkeys br-abnt2
+$ setterm -background white -foreground black -store
+$ f=configurar-proxy.sh; curl -O http://base/$f; chmod +x $f; ./$f
+$ logout
+----
+
+== Instalando o Ruby 1.9.3, via RVM em modo single-user
+[source,bash]
+----
+$ tmux new-session -d 'view <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/passo-a-passo.txt)' \; split-window -d \; attach
+$ curl -sSL https://get.rvm.io | bash -s stable
+$ source ~/.rvm/scripts/rvm
+$ type rvm | head -n 1
+$ which rvm
+$ rvm list known | less
+$ rvm list known | grep 1.9
+$ rvm install 1.9.3
+$ ruby -v
+----
+
+== Refazendo o logon para verificar se o Ruby ainda funciona
+[source,bash]
+----
+$ tmux kill-session
+$ logout
+# Refaça o logon (usuário aluno, senha @lun0123)
+$ !?new-session
+$ ruby -v
+----
+
+== Removendo a instalação, realizada em modo single-user, do RVM
+[source,bash]
+----
+$ rm -rf ~/.rvm
+$ sed -i '/rvm/d' ~/.bash_profile
+$ sed -i '/rvm/d' ~/.bashrc
+$ rm ~/.profile
+$ !?kill-session
+$ logout
+# Refaça o logon (usuário aluno, senha @lun0123)
+$ !?new-session
+----
+
+== Verificando se o RVM e o Ruby foram removidos
+[source,bash]
+----
+$ rvm list known # deverá apresentar 'command nout found'
+$ ruby -v # deverá apresentar 'command nout found'
+----
+
+== Instalando o Ruby 1.9.3, via RVM em modo multi-user
+[source,bash]
+----
+$ curl -sSL https://get.rvm.io | sudo -E bash -s stable
+$ sudo useradd -G wheel,rvm -m -s /bin/bash rvmuser
+$ sudo su - rvmuser
+$ type rvm | head -n 1
+$ which rvm
+$ rvm list known | grep 1.9
+$ rvm install 1.9.3
+$ ruby -v
+$ logout
+$ sudo userdel -rf rvmuser
+$ sudo gpasswd -a $USER rvm
+$ !?kill-session
+$ logout
+----
+
+== Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
+[source,bash]
+----
+# Refaça o logon (usuário aluno, senha @lun0123)
+$ !?new-session
+$ !?type
+$ which rvm
+$ ruby -v
+$ rvm install 2.1.1
+$ !-2
+$ rvm list
+$ rvm use 2.1.1 --default
+$ !-2
+$ ruby -v
+----
+
+== Removendo o Ruby 1.9.3, via RVM
+[source,bash]
+----
+# Este tópico não está funcionando direito! :-O
+$ rvm remove 1.9.3
+# O usuário aluno não tem privilégios para remover o diretório ...
+# A solução de contorno é fazer a remoção manual, como root:
+$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545
+$ rvm list
+----
+
+== Instalando o Awestruct
+[source,bash]
+----
+$ export WEB_PROJECT=join-community
+$ rvm use 2.1.1@$WEB_PROJECT --create
+$ sudo yum -y install libxml2-devel libxslt-devel
+$ gem install tilt --version 1.4.1
+$ gem install awestruct --version 0.5.4.rc3
+$ gem install asciidoctor
+----
+
+== Criando um novo projeto com o Awestruct
+[source,bash]
+----
+$ mkdir $WEB_PROJECT
+$ cd !$
+$ awestruct -i -f foundation
+$ cat > Gemfile << LINES
+source 'https://rubygems.org'
+gem 'awestruct', '0.5.4.rc3'
+gem 'asciidoctor', '0.1.4'
+gem 'tilt', '1.4.1'
+gem 'rake', '>= 0.9.2'
+gem 'git', '1.2.6'
+LINES
+$ gem install bundler
+$ bundle install
+$ tree --charset=ASCII | less
+$ rake
+----
+
+== Criando um túnel reverso para ver o site gerado a partir da máquina base
+* Digite <Ctrl b c>, na console do tmux, para abrir uma nova janela. Em seguida, execute:
+[source,bash]
+----
+$ read -p "Informe seu nome de usuário na máquina base: " BASE_USER
+$ ssh -R 4242:localhost:4242 $BASE_USER@base
+----
+* Abra seu browser na máquina base no endereço http://localhost:4242
+
+== Observando a estrutura gerada
+* Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
+[source,bash]
+----
+$ export TREE_CHARSET=ASCII
+$ echo "!!" >> ~/.bashrc
+$ tree _site/ | less
+----
+
+== Configurando um repositório Git para o projeto
+[source,bash]
+----
+$ git init .
+$ cat > .gitignore << LINES
+/.awestruct/
+/.ruby-*
+/.sass-cache/
+/_site/
+/_tmp/
+/Gemfile.lock
+LINES
+$ touch .nojekyll
+$ grep email ~/.gitconfig &> /dev/null || { read -p "Informe seu email: " email; git config --global user.email "$email"; }
+$ read -p "Informe seu nome: " YOURNAME; grep name ~/.gitconfig &> /dev/null || git config --global user.name "$YOURNAME"
+$ cat ~/.gitconfig
+$ git add .
+$ git commit -m 'importação inicial'
+----
+
+== Criando um repositório remoto no GitHub
+
+== Publicando seu repositório local no GitHub
+[source,bash]
+----
+$ read -p "Informe seu nome de usuário no GitHub: " GITHUB_USER
+$ git remote add origin https://github.com/$GITHUB_USER/join-community-$GITHUB_USER
+$ git push origin master
+$ cat > _config/site.yml <<EOF
+name: Write__Adapt__
+title: WriteAdapt - For People Who Love Content
+org: $YOURNAME
+author: $GITHUB_USER
+author_url: https://github.com/$GITHUB_USER
+base_url: ''
+ctx_path: ''
+EOF
+$ cat _config/site.yml
+$ cat >> _config/site.yml <<EOF
+interpolate: false
+haml:
+  :ugly: true
+EOF
+$ rake clean preview
+$ cat >> _config/site.yml <<EOF
+asciidoctor:
+  :safe: safe
+  :attributes:
+    sitename: WriteAdapt
+    base_url: ''
+    ctx_path: ''
+    idprefix: ''
+    idseparator: '-'
+    sectanchors: ''
+    icons: font
+EOF
+----

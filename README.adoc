@@ -2,9 +2,17 @@
 :author: Paulo Jerônimo
 :email: pj@paulojeronimo.info
 
-Esse repositório contém minha link:submissao.adoc[proposta de submissão de apresentação para o evento Join Community 2014] assim como os http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[slides da palestra] e outros documentos relacionados.
+Esse repositório contém:
 
-Obviamente, o trabalho de algumas outras pessoas foi utilizado, por mim, como base para criar esse repositório. Segue o passo a passo que desenvolvi para a sua criação, utilizando o http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html[Fedora 20 que tenho instalado em meu MacBook]:
+. Minha link:submissao.adoc[proposta de submissão de apresentação] para o evento http://joincommunity.com.br/[Join Community 2014];
+. Um link:passo-a-passo.adoc[guia, passo a passo], para as tarefas executadas nessa apresentação.
+.. Esse guia é insumo para os slides da palestra;
+. Os slides da palestra:
+.. Em formato HTML. Elem podem ser link:slides.html[visualizados diretamente em seu browser], se você tiver feito um clone do projeto em seu sistema de arquivos ou, http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[por esse preview], se você estiver acessando através do GitHub;
+.. Em formato PDF: link:slides.pdf[]. Observação: esse formato estará aqui, no GitHub, somente após a conclusão final dos slides.
+. Um link:acknowledgments.adoc[agradecimento] as pessoas que contribuiram com o meu aprendizado para realizar essa apresentação;
+
+Obviamente, o trabalho de algumas outras pessoas foi utilizado, por mim, como base para criar esse repositório. A seguir, descrevo o passo a passo que desenvolvi para a sua criação, utilizando o http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html[Fedora 20 que tenho instalado em meu MacBook].
 
 Baixei o projeto http://github.com/arun-gupta/wildfly-deck[wildfly-deck], do http://twitter.com/arungupta[Arun Gupta], pois ele já estava preparado com algumas configurações que eu queria utilizar. Então, fiz apenas alguns ajustes na estrutura de diretórios e apaguei alguns arquivos que eu não precisaria:
 [source,bash]
@@ -102,12 +110,7 @@ Criei um pequeno script, que executo quando estou editando o +slides.adoc+ dentr
 
 [source,bash]
 ----
-$ f=slides.build.sh; cat > $f <<EOF
-#!/bin/bash
-
-asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc
-EOF
-$ chmod +x $f
+$ f=slides.build.sh; echo 'asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc' > $f; chmod +x $f
 ----
 
 Segui em frente editando o arquivo link:slides.adoc[] e regerando o link:slides.html[] com as minhas informações até a sua conclusão: 
