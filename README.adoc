@@ -40,7 +40,7 @@ TIP: Não foi preciso instalar o https://github.com/mojavelinux/dzslides[dzslide
 $ asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc
 ----
 
-Baixei e compilei o projeto deck2pdf para fazer a geração dos slides no formato PDF:
+Baixei e compilei o projeto https://github.com/melix/deck2pdf[deck2pdf] para fazer a geração dos slides no formato PDF:
 [source,bash]
 ----
 $ pushd ~/Projects/github.com/
@@ -48,18 +48,29 @@ $ git clone https://github.com/melix/deck2pdf.git
 $ pushd deck2pdf/
 ----
 
-Instalei o JDK 8. Em seguida, executei os comandos a seguir (que precisam dele, especificamente):
+Fiz um upgrade do JDK 7 para o 8, utilizando o http://satya164.github.io/fedy/[Fedy], através dos comandos a seguir. (O deck2pdf precisa da versão 8 do Java, especificamente)
+[source,bash]
+----
+$ sudo fedy -u oracle_jdk
+$ sudo fedy -e oracle_jdk
+----
+
+Ajustei o JAVA_HOME para o local de instalação do JDK 8 e fiz o solicitei a construção do deck2pdf:
 [source,bash]
 ----
 $ export JAVA_HOME=/usr/java/latest
 $ ./gradlew distZip
 ----
 
-TIP: Ao executar esses comandos acessando a Internet através de um proxy, tive que executar a seguinte linha antes do último comando:
+.+$ ./gradlew distZip+ através de um proxy
+[NOTE]
+======
+Ao executar esse comando, acessando a Internet através de um proxy, tive que executar a seguinte linha antes dele:
 [source,bash]
 ----
 $ export JAVA_OPTS="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=3128"
 ----
+======
 
 Instalei os binários gerados como resultado da compilação/ construção do deck2pdf:
 [source,bash]
