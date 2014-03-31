@@ -1,0 +1,2 @@
+* Modificar o projeto mirrors para que ele saiba, através de uma variável, se fazer o mirror precisa ou não do uso do sudo.
+** Alterar, então, o passo de criação do mirror local do Fedora 20;

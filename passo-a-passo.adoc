@@ -4,20 +4,89 @@
 :toc:
 :numbered:
 
-== Baixando o ISO de instalação do Fedora 20
+== Instalando o VirtualBox, para criar uma VM Fedora 20
 
-== Instalando o VirtualBox
+== Instalando o Apache, para disponibilizar arquivos para a VM
 
-== Criando o seu mirror local do Fedora 20
+== Configurando, e disponibilizando para o shell, algumas variáveis de ambiente
+* Crie o arquivo +~/join-community-2014.conf+ com o comando a seguir:
 
-== Criando a vm-fedora e fazendo, nela, a instalação do Fedora 20
+.Edite o arquivo conforme o teu ambiente!
+[NOTE]
+======
+Faça isso mas, antes de copiar as linhas a seguir para o seu shell, edite os valores das variáveis conforme o teu ambiente.
+======
 [source,bash]
 ----
-$ pwd
-/home/pj/Projects/paulojeronimo/github.com/mirrors
-$ FEDORA_ISO=/data/mirrors/Fedora-20-x86_64/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso Fedora/20/x86_64/vm/vbox
+$ f=join-community-2014.conf; cat > ~/$f <<'EOF'
+# diretório dos mirrors
+MIRRORS_DIR=/data/mirrors
+
+# diretório do mirror do Fedora
+FEDORA_MIRROR=$MIRRORS_DIR/Fedora-20-x86_64
+
+# diretório de download de arquivos desse passo a passo
+DOWNLOADS_DIR=~/join-community-2014.downloads
+
+# diretório de configurações do Apache
+APACHE_CONF_DIR=/etc/httpd/conf.d
+
+# comando para fazer o reload das configurações do Apache
+APACHE_RELOAD_CMD="systemctl reload httpd"
+
+##################################################################################
+# variáveis exportadas (utilizadas por scripts que fazem um source desse arquivo): 
+##################################################################################
+
+# localização do ISO de instalação do Fedora
+export FEDORA_ISO=$FEDORA_MIRROR/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso
+
+# nome do projeto que será criado no GitHub
+export WEB_PROJECT=join-community
+
+# padrão de caracteres utilizados pelo comando tree
+export TREE_CHARSET=ASCII
+EOF
+----
+* Ajuste o arquivo +~/.bashrc+ e carregue esse arquivo:
+[source,bash]
+----
+$ grep $f ~/.bashrc &> /dev/null || echo "[ -f ~/$f ] && source ~/$f"  >> ~/.bashrc; source ~/$f
+----
+
+== Criando o seu mirror local do Fedora 20
+[source,bash]
+----
+$ mkdir -p $DOWNLOADS_DIR
+$ cd !$
+$ git clone http://github.com/paulojeronimo/mirrors.git
+$ cd mirrors
+$ cat > .bin/config <<EOF
+LOCAL_MIRRORS_DIR_ON_LINUX=$MIRRORS_DIR
+EOF
+$ .bin/create-links
+$ sudo Fedora/20/x86_64/mirror.sh
+----
+
+== Configurando o Apache local
+[source,bash]
+----
+$ cd $DOWNLOADS_DIR
+$ git clone http://gitub.com/paulojeronimo/join-community-2014.git
+$ ./join-community-2014/configurar-apache.sh
+----
+
+== Criando, iniciando e instalando o Fedora 20 na vm-fedora
+[source,bash]
+----
+$ ./mirrors/Fedora/20/x86_64/vm/vbox
 $ VBoxManage startvm vm-fedora
 ----
+.Informe o parâmetro +ks=http://10.0.2.2/ks+
+[NOTE]
+======
+Para a instalação do Fedora ocorrer de forma automática, através do kickstart, pressione <Tab> e informe +ks=http://10.0.2.2/ks+ ao final da linha de comando que será aberta na tela de inicialização da VM.
+======
 
 == Fazendo a pós-instalação da VM
 [source,bash]
@@ -136,7 +205,6 @@ $ rvm list
 == Instalando o Awestruct
 [source,bash]
 ----
-$ export WEB_PROJECT=join-community
 $ rvm use 2.1.1@$WEB_PROJECT --create
 $ sudo yum -y install libxml2-devel libxslt-devel
 $ gem install tilt --version 1.4.1
@@ -160,7 +228,7 @@ gem 'git', '1.2.6'
 LINES
 $ gem install bundler
 $ bundle install
-$ tree --charset=ASCII | less
+$ tree | less
 $ rake
 ----
 
@@ -177,8 +245,6 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 * Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
-$ export TREE_CHARSET=ASCII
-$ echo "!!" >> ~/.bashrc
 $ tree _site/ | less
 ----
 

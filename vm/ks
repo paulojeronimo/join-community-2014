@@ -1,0 +1,90 @@
+# Arquivo de Kickstart para a vm-fedora
+# Criado por Paulo Jerônimo (@paulojeronimo)
+
+# Instala (opção default) o sistema ao invés de fazer upgrade
+install
+
+# Particiona o disco automaticamente
+autopart
+
+# Ajusta a senha para o usuário root
+rootpw @lun0123
+
+# Cria e ajusta uma senha para o usuário aluno
+user --name=aluno --groups=wheel --password=@lun0123
+
+# HTTP mirror URL
+url --url http://10.0.2.2/Fedora/releases/20/Everything/x86_64/os/
+
+# Informações para configuração da rede
+network  --hostname=vm-fedora --bootproto=dhcp --onboot=on
+
+# Informações para o sistema de autorização
+auth  --useshadow  --passalgo=sha512 --enablefingerprint
+
+# Utiliza o modo texto durante a instalação
+text
+
+# Configura o X Window System
+xconfig --startxonboot
+
+# Ajusta o teclado
+keyboard us
+
+# Linguagem do sistema
+lang en_US.UTF-8
+
+# Logging a nível apenas informativo
+logging --level=info
+
+# TimeZone de São Paulo
+timezone  America/Sao_Paulo
+
+# Configurações do carregador de boot
+bootloader --append="crashkernel=auto rhgb" --location=mbr --driveorder="sda"
+
+# Zera a MBR. Previne problemas
+zerombr
+
+# Limpa todas as informações relativas a partições
+clearpart --all  
+
+# Seção pós-instalação
+%post
+
+# Ajusta o arquivo /etc/sudoers para permitir que
+#   o grupo wheel não precise informar senha ao usar o sudo
+#   (o usuário aluno pertence a este grupo)
+sed -i '
+  s/^\(%wheel.*ALL\)/#\1/
+  s/^# \(%wheel.*NOPASSWD.*\)/\1/
+' /etc/sudoers
+
+# Modifica o /etc/hosts adicionando a localização de hosts
+cat >> /etc/hosts <<EOF
+10.0.2.2  base
+EOF
+
+# Modifica o nome do host para vm-fedora
+cat > /etc/hostname <<EOF
+vm-fedora
+EOF
+
+# Adiciona o repositório para os pacotes do mirror local
+yum-config-manager --add-repo http://base/local-mirror.repo
+
+# Desabilita (temporariamente, para o update ser feito localmente) os repoisórios locais
+yum-config-manager --disable fedora
+yum-config-manager --disable updates
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1003091
+ln -s /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-20-primary /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-x86_64
+
+# Atualiza os pacotes
+yum -y update
+%end
+
+# Pacotes (e grupos de pacotes) que devem ser instalados
+%packages
+yum-utils
+%end
