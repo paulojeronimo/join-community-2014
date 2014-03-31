@@ -18,9 +18,9 @@ else
    exit 1
 fi
 
-verificar_var FEDORA_MIRROR || exit 1
-verificar_var APACHE_CONF_DIR || exit 1
-verificar_var APACHE_RELOAD_CMD || exit 1
+verifica_var FEDORA_MIRROR || exit 1
+verifica_var APACHE_CONF_DIR || exit 1
+verifica_var APACHE_RELOAD_CMD || exit 1
 
 VM_DIR=$THIS_DIR/vm
 
