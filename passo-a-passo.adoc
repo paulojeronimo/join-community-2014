@@ -4,18 +4,16 @@
 :toc:
 :numbered:
 
-== Instalando o VirtualBox, para criar uma VM Fedora 20
-
-== Instalando o Apache, para disponibilizar arquivos para a VM
-
+== Instalando algumas ferramentas
+=== Instalando o VirtualBox, para criar uma VM Fedora 20
+=== Instalando o Apache, para disponibilizar arquivos para a VM
+=== Mais algunmas: lynx, vim, tmux, tree, sed, ...
+== Abrindo esse passo a passo no tmux
+[source,bash]
+----
+$ tmux new -d 'lynx -dont_wrap_pre -dump https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc | sed "1,/Guia, passo a passo/d;/Jump to Line/,\$d" | view - ' \; splitw -d \; attach 
+----
 == Configurando, e disponibilizando para o shell, algumas variáveis de ambiente
-* Crie o arquivo +~/join-community-2014.conf+ com o comando a seguir:
-
-.Edite o arquivo conforme o teu ambiente!
-[NOTE]
-======
-Faça isso mas, antes de copiar as linhas a seguir para o seu shell, edite os valores das variáveis conforme o teu ambiente.
-======
 [source,bash]
 ----
 $ f=join-community-2014.conf; cat > ~/$f <<'EOF'
@@ -46,11 +44,11 @@ export WEB_PROJECT=join-community
 
 # padrão de caracteres utilizados pelo comando tree
 export TREE_CHARSET=ASCII
+
+# um prompt extremamente simples para a execução desse tutorial (comente se não quiser usá-lo)
+export PS1='\$ '
 EOF
-----
-* Ajuste o arquivo +~/.bashrc+ e carregue esse arquivo:
-[source,bash]
-----
+$ vim $f
 $ grep $f ~/.bashrc &> /dev/null || echo "[ -f ~/$f ] && source ~/$f"  >> ~/.bashrc; source ~/$f
 ----
 
@@ -82,11 +80,6 @@ $ ./join-community-2014/configurar-apache.sh
 $ ./mirrors/Fedora/20/x86_64/vm/vbox
 $ VBoxManage startvm vm-fedora
 ----
-.Informe o parâmetro +ks=http://10.0.2.2/ks+
-[NOTE]
-======
-Para a instalação do Fedora ocorrer de forma automática, através do kickstart, pressione <Tab> e informe +ks=http://10.0.2.2/ks+ ao final da linha de comando que será aberta na tela de inicialização da VM.
-======
 
 == Fazendo a pós-instalação da VM
 [source,bash]
