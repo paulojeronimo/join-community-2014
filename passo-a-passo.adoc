@@ -11,11 +11,8 @@
 == Abrindo esse passo a passo no tmux
 [source,bash]
 ----
-$ tmux new -d '\
-lynx -dont_wrap_pre -dump \
-https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc | \
-sed "1,/Guia, passo a passo/d" | tac | sed "1,/Jump to Line/d" | tac | \
-view -' \; splitw -d \; attach 
+$ bash <(curl https://raw.githubusercontent.com/\
+paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
 ----
 == Configurando, e disponibilizando para o shell, algumas variáveis de ambiente
 [source,bash]
@@ -74,7 +71,7 @@ $ sudo Fedora/20/x86_64/mirror.sh
 [source,bash]
 ----
 $ cd $DOWNLOADS_DIR
-$ git clone http://gitub.com/paulojeronimo/join-community-2014.git
+$ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
@@ -88,7 +85,7 @@ $ VBoxManage startvm vm-fedora
 == Fazendo a pós-instalação da VM
 [source,bash]
 ----
-$ sudo yum -y install tree vim tmux
+$ sudo yum -y install tmux lynx vim tree
 $ sudo yum -y group install c-development development-tools
 $ sudo package-cleanup -y --oldkernels --count=1
 $ sudo shutdown -h now
@@ -101,7 +98,7 @@ $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 
-== Configurando opcionais: teclado, cores no shell e proxy
+== Configurando opcionais na VM: teclado, cores no shell e proxy
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
@@ -113,7 +110,7 @@ $ logout
 == Instalando o Ruby 1.9.3, via RVM em modo single-user
 [source,bash]
 ----
-$ tmux new-session -d 'view <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/passo-a-passo.txt)' \; split-window -d \; attach
+$ bash <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
 $ curl -sSL https://get.rvm.io | bash -s stable
 $ source ~/.rvm/scripts/rvm
 $ type rvm | head -n 1
@@ -129,8 +126,8 @@ $ ruby -v
 ----
 $ tmux kill-session
 $ logout
-# Refaça o logon (usuário aluno, senha @lun0123)
-$ !?new-session
+# Refaça o logon
+$ !?tmux-view
 $ ruby -v
 ----
 
@@ -143,8 +140,8 @@ $ sed -i '/rvm/d' ~/.bashrc
 $ rm ~/.profile
 $ !?kill-session
 $ logout
-# Refaça o logon (usuário aluno, senha @lun0123)
-$ !?new-session
+# Refaça o logon
+$ !?tmux-view
 ----
 
 == Verificando se o RVM e o Ruby foram removidos
@@ -175,8 +172,8 @@ $ logout
 == Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
 [source,bash]
 ----
-# Refaça o logon (usuário aluno, senha @lun0123)
-$ !?new-session
+# Refaça o logon
+$ !?tmux-view
 $ !?type
 $ which rvm
 $ ruby -v
@@ -191,10 +188,10 @@ $ ruby -v
 == Removendo o Ruby 1.9.3, via RVM
 [source,bash]
 ----
-# Este tópico não está funcionando direito! :-O
 $ rvm remove 1.9.3
-# O usuário aluno não tem privilégios para remover o diretório ...
-# A solução de contorno é fazer a remoção manual, como root:
+# Deverá dar erro! :/
+# O usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
+# Solução de contorno: fazer a remoção manual, como root:
 $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545
 $ rvm list
 ----
