@@ -4,10 +4,10 @@
 :toc:
 :numbered:
 
-== Instalando algumas ferramentas
+== Instalando as ferramentas
 === Instalando o VirtualBox, para criar uma VM Fedora 20
 === Instalando o Apache, para disponibilizar arquivos para a VM
-=== Mais algunmas: lynx, vim, tmux, tree, sed, ...
+=== Mais algumas: lynx, vim, tmux, tree, sed, ...
 == Abrindo esse passo a passo no tmux
 [source,bash]
 ----
