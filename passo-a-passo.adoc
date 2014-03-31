@@ -103,7 +103,7 @@ $ VBoxManage startvm vm-fedora
 ----
 $ sudo loadkeys br-abnt2
 $ setterm -background white -foreground black -store
-$ f=configurar-proxy.sh; curl -O http://base/$f; chmod +x $f; ./$f
+$ bash <(curl http://base/configurar-proxy.sh)
 $ logout
 ----
 
