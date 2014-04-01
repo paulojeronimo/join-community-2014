@@ -11,9 +11,9 @@
 == Abrindo esse passo a passo no tmux
 [source,bash]
 ----
-$ bash <(curl https://raw.githubusercontent.com/\
-paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
+$ bash <(curl -L http://j.mp/jc-tmux-view)
 ----
+
 == Configurando algumas variáveis de ambiente
 [source,bash]
 ----
@@ -99,7 +99,7 @@ $ logout
 == Visualizando esse passo a passo através do tmux
 [source,bash]
 ----
-$ bash <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
+$ bash <(curl -L http://j.mp/jc-tmux-view)
 ----
 
 == Configurando algumas variávies de ambiente
