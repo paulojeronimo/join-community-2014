@@ -4,17 +4,17 @@
 :toc:
 :numbered:
 
-== Instalando as ferramentas
+== Preparando o ambiente
 === Instalando o VirtualBox, para criar uma VM Fedora 20
 === Instalando o Apache, para disponibilizar arquivos para a VM
-=== Mais algumas: tmux, lynx, vim, ...
-== Abrindo esse passo a passo no tmux
+=== Instalando tmux, lynx, vim, ...
+=== Abrindo esse passo a passo no tmux
 [source,bash]
 ----
 $ bash <(curl -L http://j.mp/jc-tmux-view)
 ----
 
-== Configurando algumas variáveis de ambiente
+=== Configurando algumas variáveis de ambiente
 [source,bash]
 ----
 $ f=~/join-community-2014.conf; cat > $f <<'EOF'
@@ -42,7 +42,8 @@ echo "[ -f $f ] && source $f"  >> ~/.bashrc
 $ source $f
 ----
 
-== Criando o seu mirror local do Fedora 20
+== Criando a VM
+=== Criando o seu mirror local do Fedora 20
 [source,bash]
 ----
 $ mkdir -p $DOWNLOADS_DIR
@@ -56,7 +57,7 @@ $ .bin/create-links
 $ sudo Fedora/20/x86_64/mirror.sh
 ----
 
-== Configurando o Apache
+=== Configurando o Apache
 [source,bash]
 ----
 $ cd $DOWNLOADS_DIR
@@ -64,14 +65,14 @@ $ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
-== Criando, iniciando e instalando o Fedora 20 na vm-fedora
+=== Criando, iniciando e instalando o Fedora 20 na vm-fedora
 [source,bash]
 ----
 $ ./mirrors/Fedora/20/x86_64/vm/vbox
 $ VBoxManage startvm vm-fedora
 ----
 
-== Fazendo a pós-instalação da VM
+=== Fazendo a pós-instalação da VM
 [source,bash]
 ----
 $ sudo yum -y group install c-development development-tools
@@ -79,7 +80,7 @@ $ sudo yum -y install tmux lynx vim tree
 $ sudo package-cleanup -y --oldkernels --count=1
 ----
 
-== Tirando um snapshot e reiniciando a VM
+=== Tirando um snapshot e reiniciando a VM
 [source,bash]
 ----
 $ sudo shutdown -h now
@@ -87,7 +88,7 @@ $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 
-== Configurando opcionais na VM: teclado, cores no shell e proxy
+=== Configurando opcionais na VM: teclado, cores no shell e proxy
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
@@ -96,13 +97,15 @@ $ bash <(curl http://base/configurar-proxy.sh)
 $ logout
 ----
 
-== Visualizando esse passo a passo através do tmux
+== Iniciando o passo a passo na VM
+
+=== Visualizando o passo a passo pelo tmux
 [source,bash]
 ----
 $ bash <(curl -L http://j.mp/jc-tmux-view)
 ----
 
-== Configurando algumas variávies de ambiente
+=== Configurando algumas variávies de ambiente
 [source,bash]
 ----
 $ f=~/ambiente; cat > $f <<EOF
@@ -110,16 +113,16 @@ export PROJECT=join-community
 export PROJECT_NAME="Join Community"
 export PROJECT_TITLE="$PROJECT_NAME - Boas práticas em arquitetura e desenvolvimento de software"
 export BASE_USER=pj
-export GITHUB_EMAIL=paulojeronimo.info
-export GITHUB_NAME='Paulo Jerônimo'
 export GITHUB_USER=paulojeronimo
+export GITHUB_NAME='Paulo Jerônimo'
+export GITHUB_EMAIL=pj@paulojeronimo.info
 export TREE_CHARSET=ASCII
 export PS1='\$ '
 EOF
 $ vim $f
 ----
 
-== Carregando o ambiente na inicialização do shell
+=== Carregando o ambiente na inicialização do shell
 [source,bash]
 ----
 $ grep `basename $f` ~/.bashrc &> /dev/null || \
@@ -127,7 +130,9 @@ echo "[ -f $f ] && source $f" >> ~/.bashrc
 $ source $f
 ----
 
-== Instalando o Ruby 1.9.3, via RVM em modo single-user
+== RVM & Ruby
+
+=== Instalando o Ruby 1.9.3, via RVM em modo single-user
 [source,bash]
 ----
 $ curl -sSL https://get.rvm.io | bash -s stable
@@ -140,7 +145,7 @@ $ rvm install 1.9.3
 $ ruby -v
 ----
 
-== Refazendo o logon para verificar se o Ruby ainda funciona
+=== Refazendo o logon para verificar se o Ruby ainda funciona
 [source,bash]
 ----
 $ tmux kill-session
@@ -150,7 +155,7 @@ $ !?tmux-view
 $ ruby -v
 ----
 
-== Removendo a instalação, realizada em modo single-user, do RVM
+=== Removendo a instalação, realizada em modo single-user, do RVM
 [source,bash]
 ----
 $ rm -rf ~/.rvm
@@ -163,14 +168,14 @@ $ logout
 $ !?tmux-view
 ----
 
-== Verificando se o RVM e o Ruby foram removidos
+=== Verificando se o RVM e o Ruby foram removidos
 [source,bash]
 ----
 $ rvm list known # deverá apresentar 'command nout found'
 $ ruby -v # deverá apresentar 'command nout found'
 ----
 
-== Instalando o Ruby 1.9.3, via RVM em modo multi-user
+=== Instalando o Ruby 1.9.3, via RVM em modo multi-user
 [source,bash]
 ----
 $ curl -sSL https://get.rvm.io | sudo -E bash -s stable
@@ -188,7 +193,7 @@ $ !?kill-session
 $ logout
 ----
 
-== Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
+=== Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
 [source,bash]
 ----
 # Refaça o logon
@@ -204,18 +209,20 @@ $ !-2
 $ ruby -v
 ----
 
-== Removendo o Ruby 1.9.3, via RVM
+=== Removendo o Ruby 1.9.3, via RVM
 [source,bash]
 ----
 $ rvm remove 1.9.3
 # Deverá dar erro! :/
 # O usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
 # Solução de contorno: fazer a remoção manual, como root:
-$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545
+$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
 ----
 
-== Instalando o Awestruct
+== Awestruct & Asciidoctor
+
+=== Instalando o Awestruct
 [source,bash]
 ----
 $ rvm use 2.1.1@$PROJECT --create
@@ -225,7 +232,7 @@ $ gem install awestruct --version 0.5.4.rc3
 $ gem install asciidoctor
 ----
 
-== Criando um novo projeto com o Awestruct
+=== Criando um novo projeto com o Awestruct
 [source,bash]
 ----
 $ mkdir $PROJECT
@@ -233,7 +240,7 @@ $ cd !$
 $ awestruct -i -f foundation
 ----
 
-== Configurando um Gemfile
+=== Configurando um Gemfile
 [source,bash]
 ----
 $ cat > Gemfile << LINES
@@ -246,26 +253,26 @@ gem 'git', '1.2.6'
 LINES
 ----
 
-== Fazendo o lock das dependências
+=== Fazendo o lock das dependências
 [source,bash]
 ----
 $ gem install bundler
 $ bundle install
 ----
 
-== Vendo a estrutura do projeto
+=== Vendo a estrutura do projeto
 [source,bash]
 ----
 $ tree | less
 ----
 
-== Gerando o site
+=== Gerando o site
 [source,bash]
 ----
 $ rake
 ----
 
-== Criando um túnel reverso para ver o site gerado a partir da máquina base
+=== Criando um túnel reverso para ver o site gerado a partir da máquina base
 * Digite <Ctrl b c>, na console do tmux, para abrir uma nova janela. Em seguida, execute:
 [source,bash]
 ----
@@ -273,14 +280,14 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
-== Observando a estrutura do site gerado
+=== Observando a estrutura do site gerado
 * Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
 ----
 
-== Configurando o Git
+=== Configurando o Git
 [source,bash]
 ----
 $ git config --global user.email "$GITHUB_EMAIL"
@@ -288,13 +295,13 @@ $ git config --global user.name "$GITHUB_NAME"
 $ cat ~/.gitconfig
 ----
 
-== Configurando um repositório Git para o projeto
+=== Configurando um repositório Git para o projeto
 [source,bash]
 ----
 $ git init .
 ----
 
-== Instruindo o Git a ignorar arquivos gerados
+=== Instruindo o Git a ignorar arquivos gerados
 [source,bash]
 ----
 $ cat > .gitignore << LINES
@@ -307,29 +314,29 @@ $ cat > .gitignore << LINES
 LINES
 ----
 
-== Desabilitando o Jekyll
+=== Desabilitando o Jekyll
 [source,bash]
 ----
 $ touch .nojekyll
 ----
 
-== Adicionando os arquivos não ignorados e fazendo o primeiro commit
+=== Adicionando os arquivos não ignorados e fazendo o primeiro commit
 [source,bash]
 ----
 $ git add .
-$ git commit -m 'importação inicial'
+$ git commit -m 'commit inicial'
 ----
 
-== Criando um repositório remoto no GitHub
+=== Criando um repositório remoto no GitHub
 
-== Publicando seu repositório local no GitHub
+=== Publicando seu repositório local no GitHub
 [source,bash]
 ----
-$ git remote add origin https://github.com/$GITHUB_USER/$PROJECT-$GITHUB_USER
+$ git remote add origin https://github.com/$GITHUB_USER/$PROJECT
 $ git push origin master
 ----
 
-== Configurando a identidade do site
+=== Configurando a identidade do site
 [source,bash]
 ----
 $ cat > _config/site.yml <<EOF
@@ -344,7 +351,7 @@ EOF
 $ cat _config/site.yml
 ----
 
-== Adicionando configurações para configurar o processador
+=== Adicionando configurações para configurar o processador
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF
@@ -354,13 +361,13 @@ haml:
 EOF
 ----
 
-== Limpando e regerando o site para ver as mudanças
+=== Limpando e regerando o site para ver as mudanças
 [source,bash]
 ----
 $ rake clean preview
 ----
 
-== Configurando o uso do AsciiDoctor
+=== Configurando o uso do AsciiDoctor
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF
