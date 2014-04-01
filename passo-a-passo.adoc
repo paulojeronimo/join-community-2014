@@ -294,6 +294,7 @@ $ cat > .gitignore << LINES
 /_tmp/
 /Gemfile.lock
 LINES
+----
 
 == Desabilitando o Jekyll
 [source,bash]
