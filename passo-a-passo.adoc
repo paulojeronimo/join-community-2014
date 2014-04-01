@@ -14,10 +14,10 @@
 $ bash <(curl https://raw.githubusercontent.com/\
 paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
 ----
-== Configurando, e disponibilizando para o shell, algumas variáveis de ambiente
+== Configurando algumas variáveis de ambiente
 [source,bash]
 ----
-$ f=join-community-2014.conf; cat > ~/$f <<'EOF'
+$ f=~/join-community-2014.conf; cat > $f <<'EOF'
 # diretório dos mirrors
 MIRRORS_DIR=/data/mirrors
 
@@ -33,24 +33,13 @@ APACHE_CONF_DIR=/etc/httpd/conf.d
 # comando para fazer o reload das configurações do Apache
 APACHE_RELOAD_CMD="systemctl reload httpd"
 
-##################################################################################
-# variáveis exportadas (utilizadas por scripts que fazem um source desse arquivo): 
-##################################################################################
-
 # localização do ISO de instalação do Fedora
 export FEDORA_ISO=$FEDORA_MIRROR/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso
-
-# nome do projeto que será criado no GitHub
-export WEB_PROJECT=join-community
-
-# padrão de caracteres utilizados pelo comando tree
-export TREE_CHARSET=ASCII
-
-# um prompt extremamente simples para a execução desse tutorial (comente se não quiser usá-lo)
-export PS1='\$ '
 EOF
 $ vim $f
-$ grep $f ~/.bashrc &> /dev/null || echo "[ -f ~/$f ] && source ~/$f"  >> ~/.bashrc; source ~/$f
+$ grep `basename $f` ~/.bashrc &> /dev/null || \
+echo "[ -f $f ] && source $f"  >> ~/.bashrc
+$ source $f
 ----
 
 == Criando o seu mirror local do Fedora 20
@@ -88,12 +77,32 @@ $ VBoxManage startvm vm-fedora
 $ sudo yum -y install tmux lynx vim tree
 $ sudo yum -y group install c-development development-tools
 $ sudo package-cleanup -y --oldkernels --count=1
-$ sudo shutdown -h now
+----
+
+== Configurando algumas variávies de ambiente
+[source,bash]
+----
+$ f=~/ambiente
+$ cat > $f <<EOF
+export PROJECT=join-community
+export PROJECT_NAME="Join Community"
+export PROJECT_TITLE="$PROJECT_NAME - Boas práticas em arquitetura e desenvolvimento de software"
+export BASE_USER=pj
+export GITHUB_EMAIL=paulojeronimo.info
+export GITHUB_NAME='Paulo Jerônimo'
+export GITHUB_USER=paulojeronimo
+export TREE_CHARSET=ASCII
+export PS1='\$ '
+EOF
+$ vim $f
+$ grep `basename $f` ~/.bashrc &> /dev/null || \
+echo "[ -f $f ] && source $f" >> ~/.bashrc
 ----
 
 == Tirando um snapshot e reiniciando a VM
 [source,bash]
 ----
+$ sudo shutdown -h now
 $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
@@ -199,7 +208,7 @@ $ rvm list
 == Instalando o Awestruct
 [source,bash]
 ----
-$ rvm use 2.1.1@$WEB_PROJECT --create
+$ rvm use 2.1.1@$PROJECT --create
 $ sudo yum -y install libxml2-devel libxslt-devel
 $ gem install tilt --version 1.4.1
 $ gem install awestruct --version 0.5.4.rc3
@@ -209,7 +218,7 @@ $ gem install asciidoctor
 == Criando um novo projeto com o Awestruct
 [source,bash]
 ----
-$ mkdir $WEB_PROJECT
+$ mkdir $PROJECT
 $ cd !$
 $ awestruct -i -f foundation
 $ cat > Gemfile << LINES
@@ -230,7 +239,6 @@ $ rake
 * Digite <Ctrl b c>, na console do tmux, para abrir uma nova janela. Em seguida, execute:
 [source,bash]
 ----
-$ read -p "Informe seu nome de usuário na máquina base: " BASE_USER
 $ ssh -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
@@ -240,6 +248,14 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 [source,bash]
 ----
 $ tree _site/ | less
+----
+
+== Fazendo a configuração inicial do Git
+[source,bash]
+----
+$ git config --global user.email "$GITHUB_EMAIL"
+$ git config --global user.name "$GITHUB_NAME"
+$ cat ~/.gitconfig
 ----
 
 == Configurando um repositório Git para o projeto
@@ -255,9 +271,6 @@ $ cat > .gitignore << LINES
 /Gemfile.lock
 LINES
 $ touch .nojekyll
-$ grep email ~/.gitconfig &> /dev/null || { read -p "Informe seu email: " email; git config --global user.email "$email"; }
-$ read -p "Informe seu nome: " YOURNAME; grep name ~/.gitconfig &> /dev/null || git config --global user.name "$YOURNAME"
-$ cat ~/.gitconfig
 $ git add .
 $ git commit -m 'importação inicial'
 ----
@@ -267,13 +280,12 @@ $ git commit -m 'importação inicial'
 == Publicando seu repositório local no GitHub
 [source,bash]
 ----
-$ read -p "Informe seu nome de usuário no GitHub: " GITHUB_USER
-$ git remote add origin https://github.com/$GITHUB_USER/join-community-$GITHUB_USER
+$ git remote add origin https://github.com/$GITHUB_USER/$PROJECT-$GITHUB_USER
 $ git push origin master
 $ cat > _config/site.yml <<EOF
-name: Write__Adapt__
-title: WriteAdapt - For People Who Love Content
-org: $YOURNAME
+name: $PROJECT_NAME
+title: $PROJECT_TITLE
+org: $GITHUB_NAME
 author: $GITHUB_USER
 author_url: https://github.com/$GITHUB_USER
 base_url: ''
@@ -290,7 +302,7 @@ $ cat >> _config/site.yml <<EOF
 asciidoctor:
   :safe: safe
   :attributes:
-    sitename: WriteAdapt
+    sitename: $PROJECT_NAME
     base_url: ''
     ctx_path: ''
     idprefix: ''
