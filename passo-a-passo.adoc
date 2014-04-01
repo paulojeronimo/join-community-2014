@@ -56,7 +56,7 @@ $ .bin/create-links
 $ sudo Fedora/20/x86_64/mirror.sh
 ----
 
-== Configurando o Apache local
+== Configurando o Apache
 [source,bash]
 ----
 $ cd $DOWNLOADS_DIR
@@ -74,9 +74,17 @@ $ VBoxManage startvm vm-fedora
 == Fazendo a pós-instalação da VM
 [source,bash]
 ----
-$ sudo yum -y install tmux lynx vim tree
 $ sudo yum -y group install c-development development-tools
+$ sudo yum -y install tmux lynx vim tree
 $ sudo package-cleanup -y --oldkernels --count=1
+----
+
+== Tirando um snapshot e reiniciando a VM
+[source,bash]
+----
+$ sudo shutdown -h now
+$ VBoxManage snapshot vm-fedora take fedora-pos-install
+$ VBoxManage startvm vm-fedora
 ----
 
 == Configurando algumas variávies de ambiente
@@ -96,14 +104,6 @@ EOF
 $ vim $f
 $ grep `basename $f` ~/.bashrc &> /dev/null || \
 echo "[ -f $f ] && source $f" >> ~/.bashrc
-----
-
-== Tirando um snapshot e reiniciando a VM
-[source,bash]
-----
-$ sudo shutdown -h now
-$ VBoxManage snapshot vm-fedora take fedora-pos-install
-$ VBoxManage startvm vm-fedora
 ----
 
 == Configurando opcionais na VM: teclado, cores no shell e proxy
