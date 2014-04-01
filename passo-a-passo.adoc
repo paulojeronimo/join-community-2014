@@ -87,6 +87,21 @@ $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 
+== Configurando opcionais na VM: teclado, cores no shell e proxy
+[source,bash]
+----
+$ sudo loadkeys br-abnt2
+$ setterm -background white -foreground black -store
+$ bash <(curl http://base/configurar-proxy.sh)
+$ logout
+----
+
+== Visualizando esse passo a passo através do tmux
+[source,bash]
+----
+$ bash <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
+----
+
 == Configurando algumas variávies de ambiente
 [source,bash]
 ----
@@ -102,23 +117,19 @@ export TREE_CHARSET=ASCII
 export PS1='\$ '
 EOF
 $ vim $f
-$ grep `basename $f` ~/.bashrc &> /dev/null || \
-echo "[ -f $f ] && source $f" >> ~/.bashrc
 ----
 
-== Configurando opcionais na VM: teclado, cores no shell e proxy
+== Carregando o ambiente na inicialização do shell
 [source,bash]
 ----
-$ sudo loadkeys br-abnt2
-$ setterm -background white -foreground black -store
-$ bash <(curl http://base/configurar-proxy.sh)
-$ logout
+$ grep `basename $f` ~/.bashrc &> /dev/null || \
+echo "[ -f $f ] && source $f" >> ~/.bashrc
+$ source $f
 ----
 
 == Instalando o Ruby 1.9.3, via RVM em modo single-user
 [source,bash]
 ----
-$ bash <(curl https://raw.githubusercontent.com/paulojeronimo/join-community-2014/master/passo-a-passo.tmux-view.sh)
 $ curl -sSL https://get.rvm.io | bash -s stable
 $ source ~/.rvm/scripts/rvm
 $ type rvm | head -n 1
@@ -269,7 +280,7 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 $ tree _site/ | less
 ----
 
-== Fazendo a configuração inicial do Git
+== Configurando o Git
 [source,bash]
 ----
 $ git config --global user.email "$GITHUB_EMAIL"
