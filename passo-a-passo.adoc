@@ -7,7 +7,7 @@
 == Instalando as ferramentas
 === Instalando o VirtualBox, para criar uma VM Fedora 20
 === Instalando o Apache, para disponibilizar arquivos para a VM
-=== Mais algumas: lynx, vim, tmux, tree, sed, ...
+=== Mais algumas: tmux, lynx, vim, ...
 == Abrindo esse passo a passo no tmux
 [source,bash]
 ----
@@ -82,8 +82,7 @@ $ sudo package-cleanup -y --oldkernels --count=1
 == Configurando algumas variávies de ambiente
 [source,bash]
 ----
-$ f=~/ambiente
-$ cat > $f <<EOF
+$ f=~/ambiente; cat > $f <<EOF
 export PROJECT=join-community
 export PROJECT_NAME="Join Community"
 export PROJECT_TITLE="$PROJECT_NAME - Boas práticas em arquitetura e desenvolvimento de software"
@@ -221,6 +220,11 @@ $ gem install asciidoctor
 $ mkdir $PROJECT
 $ cd !$
 $ awestruct -i -f foundation
+----
+
+== Configurando um Gemfile
+[source,bash]
+----
 $ cat > Gemfile << LINES
 source 'https://rubygems.org'
 gem 'awestruct', '0.5.4.rc3'
@@ -229,9 +233,24 @@ gem 'tilt', '1.4.1'
 gem 'rake', '>= 0.9.2'
 gem 'git', '1.2.6'
 LINES
+----
+
+== Fazendo o lock das dependências
+[source,bash]
+----
 $ gem install bundler
 $ bundle install
+----
+
+== Vendo a estrutura do projeto
+[source,bash]
+----
 $ tree | less
+----
+
+== Gerando o site
+[source,bash]
+----
 $ rake
 ----
 
@@ -243,7 +262,7 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
-== Observando a estrutura gerada
+== Observando a estrutura do site gerado
 * Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
@@ -262,6 +281,11 @@ $ cat ~/.gitconfig
 [source,bash]
 ----
 $ git init .
+----
+
+== Instruindo o Git a ignorar arquivos gerados
+[source,bash]
+----
 $ cat > .gitignore << LINES
 /.awestruct/
 /.ruby-*
@@ -270,7 +294,16 @@ $ cat > .gitignore << LINES
 /_tmp/
 /Gemfile.lock
 LINES
+
+== Desabilitando o Jekyll
+[source,bash]
+----
 $ touch .nojekyll
+----
+
+== Adicionando os arquivos não ignorados e fazendo o primeiro commit
+[source,bash]
+----
 $ git add .
 $ git commit -m 'importação inicial'
 ----
@@ -282,6 +315,11 @@ $ git commit -m 'importação inicial'
 ----
 $ git remote add origin https://github.com/$GITHUB_USER/$PROJECT-$GITHUB_USER
 $ git push origin master
+----
+
+== Configurando a identidade do site
+[source,bash]
+----
 $ cat > _config/site.yml <<EOF
 name: $PROJECT_NAME
 title: $PROJECT_TITLE
@@ -292,12 +330,27 @@ base_url: ''
 ctx_path: ''
 EOF
 $ cat _config/site.yml
+----
+
+== Adicionando configurações para configurar o processador
+[source,bash]
+----
 $ cat >> _config/site.yml <<EOF
 interpolate: false
 haml:
   :ugly: true
 EOF
+----
+
+== Limpando e regerando o site para ver as mudanças
+[source,bash]
+----
 $ rake clean preview
+----
+
+== Configurando o uso do AsciiDoctor
+[source,bash]
+----
 $ cat >> _config/site.yml <<EOF
 asciidoctor:
   :safe: safe
