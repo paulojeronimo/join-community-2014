@@ -10,7 +10,7 @@
 [source,bash]
 ----
 $ cd ~/VirtualBox VMs/
-$ bash <(curl http://j.mp/vm-fedora-download)
+$ bash <(curl -L http://j.mp/vm-fedora-download)
 $ 7z x vm-fedora.7z.001
 ----
 
@@ -42,7 +42,7 @@ $ VBoxManage startvm vm-fedora
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
-$ bash <(curl http://j.mp/fedora-proxy-config)
+$ bash <(curl -L http://j.mp/fedora-proxy-config)
 $ logout
 ----
 
