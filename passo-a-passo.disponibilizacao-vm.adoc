@@ -73,12 +73,22 @@ $ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
+=== Tornando o SELinux permissivo, temporariamente
+[source,bash]
+----
+$ sudo setenforce 0
+----
+
 === Criando, iniciando e instalando o Fedora 20 na VM
 [source,bash]
 ----
 $ ./mirrors/Fedora/20/x86_64/vm/vbox
 $ VBoxManage startvm vm-fedora
 ----
+[NOTE]
+======
+No boot da VM, pressione <Tab> e adicione +ks=http://10.0.2.2/ks+ ao final da linha de comando.
+======
 
 === Fazendo o shutdown após a instalação e removendo o "DVD" do Fedora do drive
 [source,bash]
@@ -103,6 +113,12 @@ $ sudo package-cleanup -y --oldkernels --count=1
 ----
 $ for repo in fedora updates; do sudo yum-config-manager --enable $repo; done
 $ sudo yum-config-manager --disable local-mirror-\*
+----
+
+=== Retornando o SELinux para enforcing
+[source,bash]
+----
+$ sudo setenforce 1
 ----
 
 === Parando a VM
@@ -144,3 +160,13 @@ $ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
 $ cp vm-fedora/* ~/Google\ Drive/vm-fedora/
 ----
 * Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/
+
+== Para reiniciar esse passo a passo
+[source,bash]
+----
+$ sudo rm -rf /etc/httpd/conf.d/join-community-2014.conf 
+$ sudo systemctl reload httpd
+$ rm -rf join-community-2014.*
+$ rm -rf ~/VirtualBox\ VMs/vm-fedora/
+$ rm -rf ~/VirtualBox\ VMs/vm-fedora.7z.*
+----

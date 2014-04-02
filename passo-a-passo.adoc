@@ -58,8 +58,8 @@ $ bash <(curl -L http://j.mp/jc-tmux-view)
 ----
 $ f=~/ambiente; cat > $f <<EOF
 export PROJECT=join-community
-export PROJECT_NAME="Join Community"
-export PROJECT_TITLE="$PROJECT_NAME - Boas práticas em arquitetura e desenvolvimento de software"
+export PROJECT_NAME='Join Community'
+export PROJECT_TITLE='Join Community - Boas práticas em arquitetura e desenvolvimento de software'
 export BASE_USER=pj
 export GITHUB_USER=paulojeronimo
 export GITHUB_NAME='Paulo Jerônimo'
@@ -75,6 +75,7 @@ $ vim $f
 ----
 $ grep `basename $f` ~/.bashrc &> /dev/null || \
 echo "[ -f $f ] && source $f" >> ~/.bashrc
+$ cat ~/.bashrc
 $ source $f
 ----
 
@@ -224,7 +225,7 @@ $ rake
 === Acessando o site gerado na VM a partir da máquina base
 
 ==== Criando um túnel reverso da VM para a base
-* Digite <Ctrl b c>, na console do tmux, para abrir uma nova janela. Em seguida, execute:
+* Digite <Ctrl b %>, na painel do tmux que está executando o rakel. Isso abrirá um novo painel a sua direita. Em seguida, execute:
 [source,bash]
 ----
 $ ssh -R 4242:localhost:4242 $BASE_USER@base
@@ -232,7 +233,7 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
-* Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
+* Volte para a janela que está executando o awestruct via rake (<Ctrl b o>). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
