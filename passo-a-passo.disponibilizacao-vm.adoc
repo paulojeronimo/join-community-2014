@@ -1,0 +1,134 @@
+= Criação e disponibilização de uma máquina virtual Fedora 20
+:author: Paulo Jerônimo
+:email: pj@paulojeronimo.info
+:toc:
+:numbered:
+
+== Preparando o ambiente
+=== Instalando o Apache
+* Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc30
+
+=== Instalando o VirtualBox
+* Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc31
+
+=== Instalando tmux, lynx, vim, ...
+[source,bash]
+----
+$ sudo yum -y install \
+tmux \
+lynx \
+vim-enhanced \
+tree \
+p7zip
+----
+
+=== Abrindo esse passo a passo no tmux
+[source,bash]
+----
+$ bash <(curl -L http://j.mp/jc-tmux-view)
+----
+
+=== Configurando algumas variáveis de ambiente
+[source,bash]
+----
+$ f=~/join-community-2014.conf; cat > $f <<'EOF'
+# diretório dos mirrors
+MIRRORS_DIR=/data/mirrors
+
+# diretório do mirror do Fedora
+FEDORA_MIRROR=$MIRRORS_DIR/Fedora-20-x86_64
+
+# diretório de download de arquivos desse passo a passo
+DOWNLOADS_DIR=~/join-community-2014.downloads
+
+# diretório de configurações do Apache
+APACHE_CONF_DIR=/etc/httpd/conf.d
+
+# comando para fazer o reload das configurações do Apache
+APACHE_RELOAD_CMD="systemctl reload httpd"
+
+# localização do ISO de instalação do Fedora
+export FEDORA_ISO=$FEDORA_MIRROR/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso
+EOF
+$ vim $f
+$ grep `basename $f` ~/.bashrc &> /dev/null || \
+echo "[ -f $f ] && source $f"  >> ~/.bashrc
+$ source $f
+----
+
+== Criando a VM
+=== Criando o seu mirror local do Fedora 20
+[source,bash]
+----
+$ mkdir -p $DOWNLOADS_DIR
+$ cd !$
+$ git clone http://github.com/paulojeronimo/mirrors.git
+$ cd mirrors
+$ cat > .bin/config <<EOF
+LOCAL_MIRRORS_DIR_ON_LINUX=$MIRRORS_DIR
+EOF
+$ .bin/create-links
+$ sudo Fedora/20/x86_64/mirror.sh
+----
+
+=== Configurando o Apache
+[source,bash]
+----
+$ cd $DOWNLOADS_DIR
+$ git clone https://github.com/paulojeronimo/join-community-2014.git
+$ ./join-community-2014/configurar-apache.sh
+----
+
+=== Criando, iniciando e instalando o Fedora 20 na vm-fedora
+[source,bash]
+----
+$ ./mirrors/Fedora/20/x86_64/vm/vbox
+$ VBoxManage startvm vm-fedora
+----
+
+=== Fazendo o shutdown após a instalação e removendo o "DVD" do Fedora do drive
+[source,bash]
+----
+$ VBoxManage controlvm vm-fedora acpipowerbutton
+$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium emptydrive
+----
+
+=== Reiniciando a VM e fazendo sua pós-instalação
+[source,bash]
+----
+$ VBoxManage startvm vm-fedora
+# Faça o logon, usuário/senha: aluno/@lun0123
+$ sudo yum -y group install c-development development-tools
+$ sudo yum -y install tmux lynx vim tree
+$ sudo package-cleanup -y --oldkernels --count=1
+----
+
+=== Reconfigurando os repositórios
+[source,bash]
+----
+$ for repo in fedora updates; do sudo yum-config-manager --enable $repo; done
+$ sudo yum-config-manager --disable local-mirror-\*
+----
+
+=== Parando a VM
+[source,bash]
+----
+$ sudo shutdown -h now
+----
+
+=== Reconfigurando os drives de CD/DVD da VM
+[source,bash]
+----
+$ VBoxManage storagectl vm-fedora --name "IDE Controller" --remove
+$ VBoxManage storagectl vm-fedora --name "IDE Controller" --add ide --controller PIIX4
+$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium emptydrive
+----
+
+== Compactando e disponibilizando a VM para download
+[source,bash]
+----
+$ cd ~/VirtualBox VMs
+$ rm -rf vm-fedora/Logs/
+$ 7za a -mmt -v200m vm-fedora vm-fedora/
+$ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
+----

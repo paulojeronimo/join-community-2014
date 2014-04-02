@@ -4,100 +4,47 @@
 :toc:
 :numbered:
 
-== Preparando o ambiente
-=== Instalando o VirtualBox, para criar uma VM Fedora 20
-=== Instalando o Apache, para disponibilizar arquivos para a VM
-=== Instalando tmux, lynx, vim, ...
-=== Abrindo esse passo a passo no tmux
+== Instalando a VM
+
+=== Baixando e extraindo a VM
 [source,bash]
 ----
-$ bash <(curl -L http://j.mp/jc-tmux-view)
+$ cd ~/VirtualBox VMs/
+$ bash <(curl http://j.mp/vm-fedora-download)
+$ 7z x vm-fedora.7z.001
 ----
 
-=== Configurando algumas variáveis de ambiente
+=== Registrando a VM no VirtualBox
 [source,bash]
 ----
-$ f=~/join-community-2014.conf; cat > $f <<'EOF'
-# diretório dos mirrors
-MIRRORS_DIR=/data/mirrors
-
-# diretório do mirror do Fedora
-FEDORA_MIRROR=$MIRRORS_DIR/Fedora-20-x86_64
-
-# diretório de download de arquivos desse passo a passo
-DOWNLOADS_DIR=~/join-community-2014.downloads
-
-# diretório de configurações do Apache
-APACHE_CONF_DIR=/etc/httpd/conf.d
-
-# comando para fazer o reload das configurações do Apache
-APACHE_RELOAD_CMD="systemctl reload httpd"
-
-# localização do ISO de instalação do Fedora
-export FEDORA_ISO=$FEDORA_MIRROR/releases/20/Fedora/x86_64/iso/Fedora-20-x86_64-netinst.iso
-EOF
-$ vim $f
-$ grep `basename $f` ~/.bashrc &> /dev/null || \
-echo "[ -f $f ] && source $f"  >> ~/.bashrc
-$ source $f
+$ VBoxManage registervm $PWD/vm-fedora/vm-fedora.vbox
 ----
 
-== Criando a VM
-=== Criando o seu mirror local do Fedora 20
+=== Gerando um snapshot de pós-instalação
 [source,bash]
 ----
-$ mkdir -p $DOWNLOADS_DIR
-$ cd !$
-$ git clone http://github.com/paulojeronimo/mirrors.git
-$ cd mirrors
-$ cat > .bin/config <<EOF
-LOCAL_MIRRORS_DIR_ON_LINUX=$MIRRORS_DIR
-EOF
-$ .bin/create-links
-$ sudo Fedora/20/x86_64/mirror.sh
-----
-
-=== Configurando o Apache
-[source,bash]
-----
-$ cd $DOWNLOADS_DIR
-$ git clone https://github.com/paulojeronimo/join-community-2014.git
-$ ./join-community-2014/configurar-apache.sh
-----
-
-=== Criando, iniciando e instalando o Fedora 20 na vm-fedora
-[source,bash]
-----
-$ ./mirrors/Fedora/20/x86_64/vm/vbox
-$ VBoxManage startvm vm-fedora
-----
-
-=== Fazendo a pós-instalação da VM
-[source,bash]
-----
-$ sudo yum -y group install c-development development-tools
-$ sudo yum -y install tmux lynx vim tree
-$ sudo package-cleanup -y --oldkernels --count=1
-----
-
-=== Tirando um snapshot e reiniciando a VM
-[source,bash]
-----
-$ sudo shutdown -h now
 $ VBoxManage snapshot vm-fedora take fedora-pos-install
+----
+
+== Executando e configurando a VM
+
+=== Iniciando a VM
+[source,bash]
+----
 $ VBoxManage startvm vm-fedora
 ----
 
-=== Configurando opcionais na VM: teclado, cores no shell e proxy
+=== Efetuando o logon
+* Usuário: aluno
+* Senha: @lun0123
+
+=== Configurando teclado e proxy
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
-$ setterm -background white -foreground black -store
-$ bash <(curl http://base/configurar-proxy.sh)
+$ bash <(curl http://j.mp/fedora-proxy-config)
 $ logout
 ----
-
-== Iniciando o passo a passo na VM
 
 === Visualizando o passo a passo pelo tmux
 [source,bash]

@@ -5,9 +5,10 @@
 Esse repositório contém:
 
 . Minha link:submissao.adoc[proposta de submissão de apresentação] para o evento http://joincommunity.com.br/[Join Community 2014];
-. Um link:passo-a-passo.adoc[guia, passo a passo], para as tarefas executadas nessa apresentação.
-.. Esse guia é insumo para os slides da palestra;
-. Os slides da palestra:
+. Dois guias, que são insumo para os slides dessa apresentação:
+.. O primeiro fala sobre link:passo-a-passo.disponibilizacao-vm.adoc[como crio e disponibilizo uma máquina virtual (VM) com o Fedora 20], instalado e configurado para as tarefas dessa apresentação;
+.. O segundo pode ser utilizado pelo público em geral, para a link:passo-a-passo.adoc[execução das tarefas da apresentação].
+. Os slides da apresentação:
 .. Em formato HTML. Elem podem ser link:slides.html[visualizados diretamente em seu browser], se você tiver feito um clone do projeto em seu sistema de arquivos ou, http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[por esse preview], se você estiver acessando através do GitHub;
 .. Em formato PDF: link:slides.pdf[]. Observação: esse formato estará aqui, no GitHub, somente após a conclusão final dos slides.
 . Um link:acknowledgments.adoc[agradecimento] as pessoas que contribuiram com o meu aprendizado para realizar essa apresentação;
