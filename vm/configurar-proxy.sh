@@ -1,5 +1,8 @@
 #!/bin/bash
 # Author: Paulo Jerônimo (@paulojeronimo, pj@paulojeronimo.info)
+#
+# Obs: esse script está configurado, até o momento, para trabalhar 
+# com proxies que não solicitam usuário/senha (meu caso)
 set +x
 
 # Configure os parâmetros default para seu proxy nas linhas abaixo:

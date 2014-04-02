@@ -2,6 +2,7 @@
 :author: Paulo Jerônimo
 :email: pj@paulojeronimo.info
 :toc:
+:toclevels: 3
 :numbered:
 
 == Instalando a VM
@@ -9,7 +10,7 @@
 === Baixando e extraindo a VM
 [source,bash]
 ----
-$ cd ~/VirtualBox VMs/
+$ cd ~/VirtualBox\ VMs/
 $ bash <(curl -L http://j.mp/vm-fedora-download)
 $ 7z x vm-fedora.7z.001
 ----
@@ -42,7 +43,7 @@ $ VBoxManage startvm vm-fedora
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
-$ bash <(curl -L http://j.mp/fedora-proxy-config)
+$ configurar-proxy.sh
 $ logout
 ----
 
@@ -77,7 +78,7 @@ echo "[ -f $f ] && source $f" >> ~/.bashrc
 $ source $f
 ----
 
-== RVM & Ruby
+== Instalando o Ruby via RVM
 
 === Instalando o Ruby 1.9.3, via RVM em modo single-user
 [source,bash]
@@ -167,9 +168,10 @@ $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
 ----
 
-== Awestruct & Asciidoctor
+== Criando sites com Awestruct & Asciidoctor
 
-=== Instalando o Awestruct
+=== Criando um novo site com o Awestruct
+==== Instalando o Awestruct
 [source,bash]
 ----
 $ rvm use 2.1.1@$PROJECT --create
@@ -179,7 +181,7 @@ $ gem install awestruct --version 0.5.4.rc3
 $ gem install asciidoctor
 ----
 
-=== Criando um novo projeto com o Awestruct
+==== Criando um novo projeto
 [source,bash]
 ----
 $ mkdir $PROJECT
@@ -187,7 +189,7 @@ $ cd !$
 $ awestruct -i -f foundation
 ----
 
-=== Configurando um Gemfile
+==== Configurando um Gemfile
 [source,bash]
 ----
 $ cat > Gemfile << LINES
@@ -200,26 +202,28 @@ gem 'git', '1.2.6'
 LINES
 ----
 
-=== Fazendo o lock das dependências
+==== Fazendo o lock das dependências
 [source,bash]
 ----
 $ gem install bundler
 $ bundle install
 ----
 
-=== Vendo a estrutura do projeto
+==== Vendo a estrutura do projeto
 [source,bash]
 ----
 $ tree | less
 ----
 
-=== Gerando o site
+==== Gerando o site
 [source,bash]
 ----
 $ rake
 ----
 
-=== Criando um túnel reverso para ver o site gerado a partir da máquina base
+=== Acessando o site gerado na VM a partir da máquina base
+
+==== Criando um túnel reverso da VM para a base
 * Digite <Ctrl b c>, na console do tmux, para abrir uma nova janela. Em seguida, execute:
 [source,bash]
 ----
@@ -227,14 +231,16 @@ $ ssh -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
-=== Observando a estrutura do site gerado
+==== Observando a estrutura do site gerado
 * Volte para a janela que está executando o awestruct via rake (<Ctrl b n>). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
 ----
 
-=== Configurando o Git
+=== Iniciando o uso do Git para o controle de versões do site
+
+==== Configurando o Git
 [source,bash]
 ----
 $ git config --global user.email "$GITHUB_EMAIL"
@@ -242,13 +248,13 @@ $ git config --global user.name "$GITHUB_NAME"
 $ cat ~/.gitconfig
 ----
 
-=== Configurando um repositório Git para o projeto
+==== Configurando um repositório Git para o projeto
 [source,bash]
 ----
 $ git init .
 ----
 
-=== Instruindo o Git a ignorar arquivos gerados
+==== Instruindo o Git a ignorar arquivos gerados
 [source,bash]
 ----
 $ cat > .gitignore << LINES
@@ -261,29 +267,31 @@ $ cat > .gitignore << LINES
 LINES
 ----
 
-=== Desabilitando o Jekyll
+==== Informando que o site não será gerado via Jekyll
 [source,bash]
 ----
 $ touch .nojekyll
 ----
 
-=== Adicionando os arquivos não ignorados e fazendo o primeiro commit
+==== Adicionando os arquivos não ignorados e fazendo o primeiro commit
 [source,bash]
 ----
 $ git add .
 $ git commit -m 'commit inicial'
 ----
 
-=== Criando um repositório remoto no GitHub
+=== Enviando o site para o GitHub
 
-=== Publicando seu repositório local no GitHub
+==== Criando um repositório remoto no GitHub
+
+==== Publicando seu repositório local no GitHub
 [source,bash]
 ----
 $ git remote add origin https://github.com/$GITHUB_USER/$PROJECT
 $ git push origin master
 ----
 
-=== Configurando a identidade do site
+==== Configurando a identidade do site
 [source,bash]
 ----
 $ cat > _config/site.yml <<EOF
@@ -298,7 +306,7 @@ EOF
 $ cat _config/site.yml
 ----
 
-=== Adicionando configurações para configurar o processador
+==== Adicionando configurações para configurar o processador
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF
@@ -308,13 +316,13 @@ haml:
 EOF
 ----
 
-=== Limpando e regerando o site para ver as mudanças
+==== Limpando e regerando o site para ver as mudanças
 [source,bash]
 ----
 $ rake clean preview
 ----
 
-=== Configurando o uso do AsciiDoctor
+==== Configurando o uso do AsciiDoctor
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF

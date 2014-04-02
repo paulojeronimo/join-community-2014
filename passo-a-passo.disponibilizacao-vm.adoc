@@ -4,7 +4,7 @@
 :toc:
 :numbered:
 
-== Preparando o ambiente
+== Preparando o ambiente para criar a VM
 === Instalando o Apache
 * Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc30
 
@@ -22,13 +22,7 @@ tree \
 p7zip
 ----
 
-=== Abrindo esse passo a passo no tmux
-[source,bash]
-----
-$ bash <(curl -L http://j.mp/jc-tmux-view)
-----
-
-=== Configurando algumas variáveis de ambiente
+=== Configurando variáveis de ambiente
 [source,bash]
 ----
 $ f=~/join-community-2014.conf; cat > $f <<'EOF'
@@ -57,7 +51,7 @@ $ source $f
 ----
 
 == Criando a VM
-=== Criando o seu mirror local do Fedora 20
+=== Criando um mirror local do Fedora 20
 [source,bash]
 ----
 $ mkdir -p $DOWNLOADS_DIR
@@ -79,7 +73,7 @@ $ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
-=== Criando, iniciando e instalando o Fedora 20 na vm-fedora
+=== Criando, iniciando e instalando o Fedora 20 na VM
 [source,bash]
 ----
 $ ./mirrors/Fedora/20/x86_64/vm/vbox
@@ -90,7 +84,8 @@ $ VBoxManage startvm vm-fedora
 [source,bash]
 ----
 $ VBoxManage controlvm vm-fedora acpipowerbutton
-$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium emptydrive
+$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
+--port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
 === Reiniciando a VM e fazendo sua pós-instalação
@@ -121,7 +116,8 @@ $ sudo shutdown -h now
 ----
 $ VBoxManage storagectl vm-fedora --name "IDE Controller" --remove
 $ VBoxManage storagectl vm-fedora --name "IDE Controller" --add ide --controller PIIX4
-$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium emptydrive
+$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
+--port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
 === Desregistrando a VM
@@ -130,11 +126,21 @@ $ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --de
 $ VBoxManage unregistervm vm-fedora
 ----
 
-== Compactando e disponibilizando a VM para download
+== Disponibilizando a VM para download
+=== Limpando arquivos desnecessários e compactando a VM
 [source,bash]
 ----
-$ cd ~/VirtualBox VMs
-$ (cd vm-fedora; find . ! \( -name . -o -name vm-fedora.vbox -o -name vm-fedora.vdi \) | xargs rm -rf)
+$ cd ~/VirtualBox\ VMs
+$ (cd vm-fedora && \
+find . ! \( -name . -o -name vm-fedora.vbox -o -name vm-fedora.vdi \) | \
+xargs rm -rf)
 $ 7za a -mmt -v200m vm-fedora vm-fedora/
 $ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
 ----
+
+=== Fazendo upload para o Google Drive
+[source,bash]
+----
+$ cp vm-fedora/* ~/Google\ Drive/vm-fedora/
+----
+* Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/

@@ -70,6 +70,11 @@ cat > /etc/hostname <<EOF
 vm-fedora
 EOF
 
+# Copia o script de configuração do proxy para o diretório ~aluno/.local/bin
+d=/home/aluno/.local/bin; mkdir -p $d
+f=configurar-proxy.sh; curl http://base/$f > $d/$f
+chown -R aluno: $d
+
 # Adiciona o repositório para os pacotes do mirror local
 yum-config-manager --add-repo http://base/local-mirror.repo
 
