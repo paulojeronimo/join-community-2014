@@ -124,11 +124,17 @@ $ VBoxManage storagectl vm-fedora --name "IDE Controller" --add ide --controller
 $ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
+=== Desregistrando a VM
+[source,bash]
+----
+$ VBoxManage unregistervm vm-fedora
+----
+
 == Compactando e disponibilizando a VM para download
 [source,bash]
 ----
 $ cd ~/VirtualBox VMs
-$ rm -rf vm-fedora/Logs/
+$ (cd vm-fedora; find . ! \( -name . -o -name vm-fedora.vbox -o -name vm-fedora.vdi \) | xargs rm -rf)
 $ 7za a -mmt -v200m vm-fedora vm-fedora/
 $ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
 ----

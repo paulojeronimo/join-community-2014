@@ -17,7 +17,7 @@ $ 7z x vm-fedora.7z.001
 === Registrando a VM no VirtualBox
 [source,bash]
 ----
-$ VBoxManage registervm $PWD/vm-fedora/vm-fedora.vbox
+$ VBoxManage registervm "$PWD/vm-fedora/vm-fedora.vbox"
 ----
 
 === Gerando um snapshot de pós-instalação
