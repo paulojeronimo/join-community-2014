@@ -5,12 +5,12 @@
 Esse repositório contém:
 
 . Minha link:submissao.adoc[proposta de submissão de apresentação] para o evento http://joincommunity.com.br/[Join Community 2014];
-. Dois guias, que são insumo para os slides dessa apresentação:
+. Dois guias que são insumo para os slides dessa apresentação:
 .. O primeiro fala sobre link:passo-a-passo.disponibilizacao-vm.adoc[como crio e disponibilizo uma máquina virtual (VM) com o Fedora 20], instalado e configurado para as tarefas dessa apresentação;
 .. O segundo pode ser utilizado pelo público em geral, para a link:passo-a-passo.adoc[execução das tarefas da apresentação].
 . Os slides da apresentação:
-.. Em formato HTML. Elem podem ser link:slides.html[visualizados diretamente em seu browser], se você tiver feito um clone do projeto em seu sistema de arquivos ou, http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[por esse preview], se você estiver acessando através do GitHub;
-.. Em formato PDF: link:slides.pdf[]. Observação: esse formato estará aqui, no GitHub, somente após a conclusão final dos slides.
+.. Em formato HTML: link:slides.html[]. Elem podem ser visualizados diretamente em seu browser se você tiver feito um clone do projeto em seu sistema de arquivos. Do contrário, abra-o http://htmlpreview.github.io/?https://github.com/paulojeronimo/join-community-2014/blob/master/slides.html[através do htmlpreview];
+.. Em formato PDF: link:slides.pdf[]. _Observação: esse formato estará aqui, no GitHub, somente após a conclusão final dos slides_.
 . Um link:acknowledgments.adoc[agradecimento] as pessoas que contribuiram com o meu aprendizado para realizar essa apresentação;
 
 Obviamente, o trabalho de algumas outras pessoas foi utilizado, por mim, como base para criar esse repositório. A seguir, descrevo o passo a passo que desenvolvi para a sua criação, utilizando o http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html[Fedora 20 que tenho instalado em meu MacBook].
@@ -111,7 +111,9 @@ Criei um pequeno script, que executo quando estou editando o +slides.adoc+ dentr
 
 [source,bash]
 ----
-$ f=slides.build.sh; echo 'asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc' > $f; chmod +x $f
+$ f=slides.build.sh
+$ echo 'asciidoctor -b dzslides -T asciidoctor-backends/slim/dzslides slides.adoc' > $f
+$ chmod +x $f
 ----
 
 Segui em frente editando o arquivo link:slides.adoc[] e regerando o link:slides.html[] com as minhas informações até a sua conclusão: 
