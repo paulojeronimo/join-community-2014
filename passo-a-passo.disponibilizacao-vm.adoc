@@ -4,23 +4,23 @@
 :toc:
 :numbered:
 
-== Preparando o ambiente para criar a VM
+== Preparando o ambiente Fedora para criar e disponibilizar a VM
+=== Instalando alguns utilitários
+[source,bash]
+----
+$ sudo yum -y install \
+vim-enhanced \
+p7zip
+----
+
 === Instalando o Apache
 * Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc30
 
 === Instalando o VirtualBox
 * Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc31
 
-=== Instalando tmux, lynx, vim, ...
-[source,bash]
-----
-$ sudo yum -y install \
-tmux \
-lynx \
-vim-enhanced \
-tree \
-p7zip
-----
+=== Instalando um cliente para o Google Drive
+* TODO
 
 === Configurando variáveis de ambiente
 [source,bash]
@@ -51,7 +51,7 @@ $ source $f
 ----
 
 == Criando a VM
-=== Criando um mirror local do Fedora 20
+=== Configurando o uso de um mirror local do Fedora 20
 [source,bash]
 ----
 $ mkdir -p $DOWNLOADS_DIR
@@ -62,6 +62,11 @@ $ cat > .bin/config <<EOF
 LOCAL_MIRRORS_DIR_ON_LINUX=$MIRRORS_DIR
 EOF
 $ .bin/create-links
+----
+
+=== Criando e/ou atualizando o mirror local
+[source,bash]
+----
 $ sudo Fedora/20/x86_64/mirror.sh
 ----
 
@@ -90,11 +95,18 @@ $ VBoxManage startvm vm-fedora
 No boot da VM, pressione <Tab> e adicione +ks=http://10.0.2.2/ks+ ao final da linha de comando.
 ======
 
+=== Entendo o processo de instalação automática do Fedora
+[source,bash]
+----
+$ vim join-community-2014/vm/ks
+----
+
 === Fazendo o shutdown após a instalação e removendo o "DVD" do Fedora do drive
 [source,bash]
 ----
 $ VBoxManage controlvm vm-fedora acpipowerbutton
-$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
+$ VBoxManage storageattach vm-fedora \
+--storagectl "IDE Controller" \
 --port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
@@ -108,6 +120,11 @@ $ sudo setenforce 1
 [source,bash]
 ----
 $ VBoxManage startvm vm-fedora
+----
+
+* Logue-se na VM (usuário/senha: aluno/@lun00123) e execute:
+[source,bash]
+----
 $ sudo package-cleanup -y --oldkernels --count=1
 $ d=/var/cache/yum/; sudo bash -c "rm -rf $d; mkdir -p $d"
 $ history -c
@@ -117,9 +134,12 @@ $ history -c
 [source,bash]
 ----
 $ VBoxManage controlvm vm-fedora acpipowerbutton
-$ VBoxManage storagectl vm-fedora --name "IDE Controller" --remove
-$ VBoxManage storagectl vm-fedora --name "IDE Controller" --add ide --controller PIIX4
-$ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
+$ VBoxManage storagectl vm-fedora \ 
+--name "IDE Controller" --remove
+$ VBoxManage storagectl vm-fedora \
+--name "IDE Controller" --add ide --controller PIIX4
+$ VBoxManage storageattach vm-fedora \
+--storagectl "IDE Controller" \
 --port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
@@ -142,11 +162,24 @@ $ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
 ----
 
 === Fazendo upload para o Google Drive
+* Montando o Google Drive:
 [source,bash]
 ----
-$ cp vm-fedora/* ~/Google\ Drive/vm-fedora/
+$ mkdir ~/google-drive
+$ google-drive-ocamlfuse ~/google-drive
 ----
-* Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/
+* Fazendo a cópia da VM:
+----
+[source,bash]
+----
+$ rsync -av vm-fedora.* ~/google-drive/vm-fedora/
+----
+* Desmontando o Google Drive:
+[source,bash]
+-----
+$ fusermount -u ~/google-drive
+-----
+* Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/. Essa é uma URL curta, que crie no http://gdriv.es, para a URL longa https://drive.google.com/folderview?id=0B_tTlCk55SmjZGlNckhCRldUUDQ.
 
 == Para reiniciar esse passo a passo
 [source,bash]
