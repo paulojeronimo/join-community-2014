@@ -169,7 +169,6 @@ $ mkdir ~/google-drive
 $ google-drive-ocamlfuse ~/google-drive
 ----
 * Fazendo a cópia da VM:
-----
 [source,bash]
 ----
 $ rsync -av vm-fedora.* ~/google-drive/vm-fedora/
