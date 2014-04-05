@@ -178,7 +178,7 @@ $ rsync -av vm-fedora.* ~/google-drive/vm-fedora/
 -----
 $ fusermount -u ~/google-drive
 -----
-* Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/. Essa é uma URL curta, que crie no http://gdriv.es, para a URL longa https://drive.google.com/folderview?id=0B_tTlCk55SmjZGlNckhCRldUUDQ.
+* Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/. Essa é uma URL curta, que criei no http://gdriv.es, para a URL longa https://drive.google.com/folderview?id=0B_tTlCk55SmjZGlNckhCRldUUDQ.
 
 == Para reiniciar esse passo a passo
 [source,bash]
