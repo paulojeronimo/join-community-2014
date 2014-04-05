@@ -50,7 +50,10 @@ zerombr
 clearpart --all  
 
 # Seção pós-instalação
-%post
+%post --log=/root/post.log
+
+# Habilita a depuração dos comandos
+set -x
 
 # Ajusta o arquivo /etc/sudoers para permitir que
 #   o grupo wheel não precise informar senha ao usar o sudo
@@ -79,18 +82,32 @@ chown -R aluno: $d
 # Adiciona o repositório para os pacotes do mirror local
 yum-config-manager --add-repo http://base/local-mirror.repo
 
-# Desabilita (temporariamente, para o update ser feito localmente) os repoisórios locais
+# Desabilita (temporariamente, para o update ser feito localmente) os repoisórios remotos
 yum-config-manager --disable fedora
 yum-config-manager --disable updates
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1003091
 ln -s /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-20-primary /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-x86_64
 
-# Atualiza os pacotes
+# Atualiza os pacotes utilizando o mirror local
 yum -y update
+
+# Reabilita os repositórios remotos
+yum-config-manager --enable fedora
+yum-config-manager --enable updates
+
+# Desabilita o repositório local
+yum-config-manager --disable local-mirror-\*
+
 %end
 
 # Pacotes (e grupos de pacotes) que devem ser instalados
 %packages
+@c-development
+@development-tools
 yum-utils
+tmux
+lynx
+vim
+tree
 %end

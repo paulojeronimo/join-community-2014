@@ -98,32 +98,19 @@ $ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
 --port 1 --device 0 --type dvddrive --medium emptydrive
 ----
 
-=== Reiniciando a VM e fazendo sua pós-instalação
-[source,bash]
-----
-$ VBoxManage startvm vm-fedora
-# Faça o logon, usuário/senha: aluno/@lun0123
-$ sudo yum -y group install c-development development-tools
-$ sudo yum -y install tmux lynx vim tree
-$ sudo package-cleanup -y --oldkernels --count=1
-----
-
-=== Reconfigurando os repositórios
-[source,bash]
-----
-$ for repo in fedora updates; do sudo yum-config-manager --enable $repo; done
-$ sudo yum-config-manager --disable local-mirror-\*
-----
-
 === Retornando o SELinux para enforcing
 [source,bash]
 ----
 $ sudo setenforce 1
 ----
 
-=== Parando a VM
+=== Reiniciando a Vm e removendo arquivos desnecessários
 [source,bash]
 ----
+$ VBoxManage startvm vm-fedora
+$ sudo package-cleanup -y --oldkernels --count=1
+$ d=/var/cache/yum/; sudo bash -c "rm -rf $d; mkdir -p $d"
+$ history -c
 $ sudo shutdown -h now
 ----
 
@@ -167,6 +154,6 @@ $ cp vm-fedora/* ~/Google\ Drive/vm-fedora/
 $ sudo rm -rf /etc/httpd/conf.d/join-community-2014.conf 
 $ sudo systemctl reload httpd
 $ rm -rf join-community-2014.*
-$ rm -rf ~/VirtualBox\ VMs/vm-fedora/
+$ VBoxManage unregistervm vm-fedora --delete
 $ rm -rf ~/VirtualBox\ VMs/vm-fedora.7z.*
 ----

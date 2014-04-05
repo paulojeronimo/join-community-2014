@@ -47,6 +47,12 @@ $ configurar-proxy.sh
 $ logout
 ----
 
+=== Atualizando os pacotes da VM
+[source,bash]
+----
+$ sudo yum -y update
+----
+
 === Visualizando o passo a passo pelo tmux
 [source,bash]
 ----
