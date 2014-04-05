@@ -104,19 +104,19 @@ $ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
 $ sudo setenforce 1
 ----
 
-=== Reiniciando a Vm e removendo arquivos desnecessários
+=== Reiniciando a VM e removendo arquivos desnecessários
 [source,bash]
 ----
 $ VBoxManage startvm vm-fedora
 $ sudo package-cleanup -y --oldkernels --count=1
 $ d=/var/cache/yum/; sudo bash -c "rm -rf $d; mkdir -p $d"
 $ history -c
-$ sudo shutdown -h now
 ----
 
-=== Reconfigurando os drives de CD/DVD da VM
+=== Desligando e reconfigurando os drives de CD/DVD da VM
 [source,bash]
 ----
+$ VBoxManage controlvm vm-fedora acpipowerbutton
 $ VBoxManage storagectl vm-fedora --name "IDE Controller" --remove
 $ VBoxManage storagectl vm-fedora --name "IDE Controller" --add ide --controller PIIX4
 $ VBoxManage storageattach vm-fedora --storagectl "IDE Controller" \
