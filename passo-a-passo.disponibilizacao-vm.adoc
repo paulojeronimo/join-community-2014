@@ -176,4 +176,5 @@ $ sudo systemctl reload httpd
 $ rm -rf join-community-2014.*
 $ VBoxManage unregistervm vm-fedora --delete
 $ rm -rf ~/VirtualBox\ VMs/vm-fedora.7z.*
+$ sed -i '/join-community/d' ~/.bashrc
 ----
