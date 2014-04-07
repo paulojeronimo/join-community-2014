@@ -12,7 +12,7 @@
 ----
 $ cd ~/VirtualBox\ VMs/
 $ bash <(curl -L http://j.mp/vm-fedora-download)
-$ 7z x vm-fedora.7z.001
+$ 7za x vm-fedora.7z.001
 ----
 
 === Registrando a VM no VirtualBox
@@ -35,16 +35,26 @@ $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 
-=== Efetuando o logon
+=== Efetuando o logon no console da VM
 * Usuário: aluno
 * Senha: @lun0123
 
-=== Configurando teclado e proxy
+=== Executando algumas configurações opcionais
+==== Configurando teclado e proxy
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
 $ configurar-proxy.sh
 $ logout
+----
+
+==== Utilizando o seu mirror local ao invés dos remotos
+[source,bash]
+----
+$ for repo in fedora updates; \
+do sudo yum-config-manager --disable $repo; \
+done
+$ sudo yum-config-manager --enable local-mirror-\*
 ----
 
 === Atualizando os pacotes da VM
@@ -71,7 +81,7 @@ export GITHUB_USER=paulojeronimo
 export GITHUB_NAME='Paulo Jerônimo'
 export GITHUB_EMAIL=pj@paulojeronimo.info
 export TREE_CHARSET=ASCII
-export PS1='\$ '
+export PS1='\\$ '
 EOF
 $ vim $f
 ----
@@ -83,6 +93,34 @@ $ grep `basename $f` ~/.bashrc &> /dev/null || \
 echo "[ -f $f ] && source $f" >> ~/.bashrc
 $ cat ~/.bashrc
 $ source $f
+----
+
+=== Acessando a VM a partir da base
+[source,bash]
+----
+$ ssh-keygen
+$ ssh-copy-id $BASE_USER@base
+$ echo 'while true; do sleep 1; done' | \
+nohup ssh -R 2222:localhost:22 $BASE_USER@base bash &
+$ tmux kill-session
+$ logout
+----
+.autossh
+[NOTE]
+======
+Mais a frente utilizaremos o comando +autossh+ para melhorar isso ...
+======
+* Na base, se ainda não tiver gerado suas chaves, execute:
+[source,bash]
+----
+$ ssh-keygen
+----
+* Em seguida, exporte sua chave pública para a VM:
+[source,bash]
+----
+$ ssh-copy-id -p 2222 aluno@localhost
+$ ssh -p 2222 !$
+$ !?tmux-view
 ----
 
 == Instalando o Ruby via RVM
@@ -103,9 +141,9 @@ $ ruby -v
 === Refazendo o logon para verificar se o Ruby ainda funciona
 [source,bash]
 ----
-$ tmux kill-session
+$ !?kill-session
 $ logout
-# Refaça o logon
+$ !?ssh -p 2222
 $ !?tmux-view
 $ ruby -v
 ----
@@ -119,7 +157,7 @@ $ sed -i '/rvm/d' ~/.bashrc
 $ rm ~/.profile
 $ !?kill-session
 $ logout
-# Refaça o logon
+$ !?ssh -p 2222
 $ !?tmux-view
 ----
 
@@ -151,7 +189,7 @@ $ logout
 === Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
 [source,bash]
 ----
-# Refaça o logon
+$ !?ssh -p 2222
 $ !?tmux-view
 $ !?type
 $ which rvm
@@ -168,11 +206,22 @@ $ ruby -v
 [source,bash]
 ----
 $ rvm remove 1.9.3
-# Deverá dar erro! :/
-# O usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
+# Deverá dar erro pois o usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
 # Solução de contorno: fazer a remoção manual, como root:
 $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
+----
+
+=== Gerando um snapshot do estado da VM
+[source,bash]
+----
+$ shutdown -h now
+# aguarde a VM ser encerrada ...
+
+$ VBoxManage snapshot vm-fedora take ruby-pos-install
+$ VBoxManage startvm vm-fedora
+$ !?ssh -p 2222
+$ !?tmux-view
 ----
 
 == Criando sites com Awestruct & Asciidoctor
@@ -231,15 +280,15 @@ $ rake
 === Acessando o site gerado na VM a partir da máquina base
 
 ==== Criando um túnel reverso da VM para a base
-* Digite <Ctrl b %>, na painel do tmux que está executando o rakel. Isso abrirá um novo painel a sua direita. Em seguida, execute:
+* Digite <Ctrl b %> na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
 [source,bash]
 ----
-$ ssh -R 4242:localhost:4242 $BASE_USER@base
+$ autossh -M 0 -f -gNC -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
-* Volte para a janela que está executando o awestruct via rake (<Ctrl b o>). Dê um <Ctrl c> no servidor. Em seguida, execute:
+* Volte para a janela que está executando o awestruct via rake (Digite <Ctrl b o> até posicionar nela). Dê um <Ctrl c> no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
