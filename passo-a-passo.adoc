@@ -4,6 +4,7 @@
 :toc:
 :toclevels: 3
 :numbered:
+:experimental:
 
 == Instalando a VM
 
@@ -295,7 +296,7 @@ $ rake
 === Acessando o site gerado na VM a partir da máquina base
 
 ==== Criando um túnel reverso da VM para a base
-* Digite <Ctrl b %> na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
+* Digite kbd:[Ctrl+b+%] na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
 [source,bash]
 ----
 $ sudo yum -y install autossh
@@ -306,7 +307,7 @@ $ autossh -M 0 -f -gNC \
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
-* Volte para a janela que está executando o awestruct via rake (Digite <Ctrl b o> até posicionar nela). Dê um <Ctrl c> no servidor. Em seguida, execute:
+* Volte para a janela que está executando o awestruct via rake (Digite kbd:[Ctrl+b+o] até posicionar nela). Dê um kbd:[Ctrl+C] no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
@@ -411,4 +412,103 @@ asciidoctor:
     sectanchors: ''
     icons: font
 EOF
+----
+
+==== Criando a página about.adoc na pasta do projeto:
+[source,bash]
+----
+$ cat >> about.adoc <<EOF
+= About {sitename}
+$GITHUB_USER
+:page-layout: base
+:showtitle:
+
+[.lead]
+{sitename} was founded by {author} during a conference workshop.
+It's quickly becoming much bigger than this humble beginning.
+
+This page is written in http://asciidoc.org[AsciiDoc].
+It's transformed by http://awestruct.org[Awestruct] and http://asciidoctor.org[Asciidoctor] into a webpage for this static website.
+EOF
+----
+
+==== Adicionando um link para a página about na barra de navegação:
+[source,bash]
+----
+$ sed -i '31 i \
+        %li.divider\
+          %li\
+            %a(href="#{site.ctx_path}/about.html") About\
+' _layouts/base.html.haml
+----
+
+==== Adicionando o estilo referenciando no documento (.lead)
+* Um pouco de http://tableless.com.br/sass-um-outro-metodo-de-escrever-css/[Sass]:
+[source,bash]
+----
+$ sed -i '$ a \
+.paragraph.lead > p {\
+  @extend %lead;\
+}\
+' stylesheets/app.scss
+----
+* Recarregue a página http://localhost:4242
+** Acesse, nessa página, o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
+* Pressione kbd:[Ctrl+C] no console do servidor;
+
+
+==== Observando as mudanças que precisam ser confirmadas e fazendo o commit
+[source,bash]
+----
+$ git status
+$ git commit . -m "novas funcionalidades"
+$ git push origin master
+----
+
+==== Criando o ramo de publicação (gh-pages)
+[source,bash]
+----
+$ git checkout --orphan gh-pages
+$ rm -rf *
+$ rm -rf .awestruct* .sass-* .gitignore .gitmodules
+$ git rm --cached *
+$ echo "GitHub Pages placeholder" > index.html
+$ git add index.html .nojekyll
+$ git commit -m "iniciando o ramo de publicação para o GitHub Pages"
+----
+
+==== Implantando o ramo de publicação
+[source,bash]
+----
+$ git push origin gh-pages
+----
+
+==== Visualizando o seu site 
+* Acesse (substituindo as variáveis pelos seus valores, obviamente): http://$GITHUB_USER.github.io/$PROJECT
+
+==== Retornando para o ramo master
+[source,bash]
+----
+$ git checkout master
+----
+
+==== Configurando o implantador do Awestruct para publicar o site no GitHub Pages
+[source,bash]
+----
+$ sed -i "$ a \
+profiles:\
+  development:\
+    deploy: nil\
+  production:\
+    base_url: http://$GITHUB_USER.github.io/$PROJECT\
+    ctx_path: /$PROJECT\
+    asciidoctor:\
+      :attributes:\
+        base_url: http://$GITHUB_USER.github.io/$PROJECT\
+        ctx_path: /$PROJECT\
+        imagesdir: http://$GITHUB_USER.github.io/$PROJECT/images\
+    deploy:\
+      host: github_pages\
+      branch: gh-pages\
+" _config/site.yml
 ----
