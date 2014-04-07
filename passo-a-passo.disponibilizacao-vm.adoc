@@ -78,12 +78,6 @@ $ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
-=== Tornando o SELinux permissivo, temporariamente
-[source,bash]
-----
-$ sudo setenforce 0
-----
-
 === Criando, iniciando e instalando o Fedora 20 na VM
 [source,bash]
 ----
@@ -108,12 +102,6 @@ $ VBoxManage controlvm vm-fedora acpipowerbutton
 $ VBoxManage storageattach vm-fedora \
 --storagectl "IDE Controller" \
 --port 1 --device 0 --type dvddrive --medium emptydrive
-----
-
-=== Retornando o SELinux para enforcing
-[source,bash]
-----
-$ sudo setenforce 1
 ----
 
 === Reiniciando a VM e removendo arquivos desnecessários
