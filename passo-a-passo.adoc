@@ -215,11 +215,26 @@ $ rvm list
 === Gerando um snapshot do estado da VM
 [source,bash]
 ----
-$ shutdown -h now
+$ sudo shutdown -h now
 # aguarde a VM ser encerrada ...
 
 $ VBoxManage snapshot vm-fedora take ruby-pos-install
+----
+
+=== Reiniciando a VM e reabrindo sua console a partir da base
+[source,bash]
+----
 $ VBoxManage startvm vm-fedora
+----
+* Refaça o login pelo console da VM e execute:
+[source,bash]
+----
+$ !?nohup ssh
+$ logout
+----
+* Na console da base, execute:
+[source,bash]
+----
 $ !?ssh -p 2222
 $ !?tmux-view
 ----
@@ -283,7 +298,10 @@ $ rake
 * Digite <Ctrl b %> na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
 [source,bash]
 ----
-$ autossh -M 0 -f -gNC -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R 4242:localhost:4242 $BASE_USER@base
+$ sudo yum -y install autossh
+$ autossh -M 0 -f -gNC
+-o "ServerAliveInterval 60" -o "ServerAliveCountMax 3"
+-R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
