@@ -299,8 +299,8 @@ $ rake
 [source,bash]
 ----
 $ sudo yum -y install autossh
-$ autossh -M 0 -f -gNC
--o "ServerAliveInterval 60" -o "ServerAliveCountMax 3"
+$ autossh -M 0 -f -gNC \
+-o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
 -R 4242:localhost:4242 $BASE_USER@base
 ----
 * Abra seu browser na máquina base no endereço http://localhost:4242
