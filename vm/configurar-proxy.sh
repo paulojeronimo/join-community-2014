@@ -30,7 +30,7 @@ do
 done
 
 f=/etc/hosts
-grep -v '[[:space:]]proxy$' $f | sudo tee $f > /dev/null
+sudo sed -i '/[[:space:]]proxy$/d' $f
 echo -e "$PROXY_IP\tproxy" | sudo tee -a $f > /dev/null
 echo "Proxy configurado em $f!"
 
@@ -47,7 +47,7 @@ EOF
 echo "Proxy configurado em $f!"
 
 f=/etc/yum.conf
-grep -v '^proxy=' $f | sudo tee $f > /dev/null
+sudo sed -i '/^proxy=/d' $f
 echo -e "proxy=http://$PROXY" | sudo tee -a $f > /dev/null
 echo "Proxy configurado em $f!"
 
