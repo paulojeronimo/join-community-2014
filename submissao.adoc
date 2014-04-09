@@ -29,8 +29,14 @@ O Awestruct é um framework para a criação de sites HTML estáticos. Ele é in
 * Sites de projetos:
 ** É claro que o https://github.com/awestruct/awestruct.org[código do site do projeto Awestruct] está disponível no GitHub e é desenvolvido utilizando o próprio Awestruct;
 ** O http://asciidoctor.org[site do projeto Asciidoctor] também é escrito com o Awestruct (obviamente no formato AsciiDoc) e https://github.com/paulojeronimo/asciidoctor.org[seu código] está disponível no GitHub.
+** O site do http://wildfly.org[WildFly], a nova versão do servidor de aplicações JBoss, também é escrito com o Awestruct e https://github.com/wildfly/wildfly.org[seu código] está disponível no GitHub;
+** O http://hibernate.org[Hibernate], um framework popular para mapeamento de objetos para bancos de dados relacionais, também é escrito com o Awestruct e https://github.com/hibernate/hibernate.org[seu código] está disponível no GitHub;
 ** O http://arquillian.org[Arquillian] é um framework para testes de aplicações Java EE. Seu site é frequentemente atualizado por vários participantes do projeto, de forma colaborativa, e https://github.com/arquillian/arquillian.github.com[seu código] está disponível no GitHub;
 ** O http://infinispan.org/[Infinispan], uma plataforma para data grid, também é um bom exemplo de site gerado com o Awestruct.  https://github.com/infinispan/infinispan.github.io[Seu código] está disponível no GitHub;
+[NOTE]
+======
+Pelo que você pode perceber, Awestruct parece ser a ferramenta escolhida (e patrocinada) pela Red Hat para a geração dos sites estáticos de todos os projetos que ela patrocina ...
+======
 * Sites pessoais/blogs:
 ** O http://www.emmanuelbernard.com/[site de Emmanuel Bernard], autor do livro http://www.emmanuelbernard.com/books/hsia/[Hibernate Search in Action], líder da especificação "Bean Validation" e membro da especificação "Java Persistence", ambas do JCP. Todo o https://github.com/emmanuelbernard/emmanuelbernard.com[código de seu site] pode ser baixado do GitHub;
 ** O http://mgreau.com/[site de Maxime Gréau], autor de um http://mgreau.com/books.html[livro em francês sobre o Apache Maven 3]. O https://github.com/mgreau/mgreau.github.io[código de seu site] também está disponível no GitHub;
