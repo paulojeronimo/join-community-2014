@@ -455,7 +455,7 @@ asciidoctor:
 EOF
 ----
 
-==== Criando a página about.adoc na pasta do projeto:
+==== Criando a página about.adoc na pasta do projeto
 [source,bash]
 ----
 $ cat > about.adoc <<EOF
@@ -465,14 +465,19 @@ $GITHUB_USER
 :showtitle:
 
 [.lead]
-{sitename} is a cool event in http://j.mp/cade-goiania[Goiânia/GO/Brasil]! This site was founded by {author} and build by the execution of a https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc[step by step guide] created by http://paulojeronimo.info[Paulo Jerônimo]. It's quickly becoming much bigger than this humble beginning.
+{sitename} is a cool event in http://j.mp/cade-goiania[Goiânia/GO/Brasil]!
+This site was founded by {author} and build by the execution of a 
+https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc[step by step guide] 
+created by http://paulojeronimo.info[Paulo Jerônimo].
+It's quickly becoming much bigger than this humble beginning.
 
 This page is written in http://asciidoc.org[AsciiDoc].
-It's transformed by http://awestruct.org[Awestruct] and http://asciidoctor.org[Asciidoctor] into a webpage for this static website.
+It's transformed by http://awestruct.org[Awestruct] and http://asciidoctor.org[Asciidoctor] 
+into a webpage for this static website.
 EOF
 ----
 
-==== Adicionando um link para a página about na barra de navegação:
+==== Adicionando um link para a página about na barra de navegação
 [source,bash]
 ----
 $ sed -i '31 i \
