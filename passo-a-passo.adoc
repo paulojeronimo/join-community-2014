@@ -4,6 +4,7 @@
 :toc:
 :toclevels: 3
 :numbered:
+:experimental:
 
 == Instalando a VM
 
@@ -35,20 +36,35 @@ $ VBoxManage snapshot vm-fedora take fedora-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 
-=== Efetuando o logon no console da VM
+=== Efetuando o login no console da VM
 * Usuário: aluno
 * Senha: @lun0123
 
 === Executando algumas configurações opcionais
 ==== Configurando teclado e proxy
+* Configure o teclado, se necessário:
 [source,bash]
 ----
 $ sudo loadkeys br-abnt2
+----
+* O comando acima altera o teclado somente enquanto a VM está em execução. Se quiser deixar o teclado br-abnt2 configurado de forma permanente, execute:
+[source,bash]
+----
+$ sudo localectl set-keymap br-abnt2
+----
+* Se estiver acessando a Internet através de um proxy, execute:
+[source,bash]
+----
 $ configurar-proxy.sh
+----
+* Se configurou o proxy, faça o logout pois as suas configurações só serão visíveis após um novo login:
+[source,bash]
+----
 $ logout
 ----
 
 ==== Utilizando o seu mirror local ao invés dos remotos
+* Refaça o login pelo console da VM e execute:
 [source,bash]
 ----
 $ for repo in fedora updates; \
@@ -72,7 +88,7 @@ $ bash <(curl -L http://j.mp/jc-tmux-view)
 === Configurando algumas variávies de ambiente
 [source,bash]
 ----
-$ f=~/ambiente; cat > $f <<EOF
+$ f=~/ambiente; cat > $f <<'EOF'
 export PROJECT=join-community
 export PROJECT_NAME='Join Community'
 export PROJECT_TITLE='Join Community - Boas práticas em arquitetura e desenvolvimento de software'
@@ -81,7 +97,7 @@ export GITHUB_USER=paulojeronimo
 export GITHUB_NAME='Paulo Jerônimo'
 export GITHUB_EMAIL=pj@paulojeronimo.info
 export TREE_CHARSET=ASCII
-export PS1='\\$ '
+export PS1='\$ '
 EOF
 $ vim $f
 ----
@@ -100,6 +116,8 @@ $ source $f
 ----
 $ ssh-keygen
 $ ssh-copy-id $BASE_USER@base
+$ ssh $BASE_USER@base
+$ logout
 $ echo 'while true; do sleep 1; done' | \
 nohup ssh -R 2222:localhost:22 $BASE_USER@base bash &
 $ tmux kill-session
@@ -212,18 +230,6 @@ $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
 ----
 
-=== Gerando um snapshot do estado da VM
-[source,bash]
-----
-$ shutdown -h now
-# aguarde a VM ser encerrada ...
-
-$ VBoxManage snapshot vm-fedora take ruby-pos-install
-$ VBoxManage startvm vm-fedora
-$ !?ssh -p 2222
-$ !?tmux-view
-----
-
 == Criando sites com Awestruct & Asciidoctor
 
 === Criando um novo site com o Awestruct
@@ -237,10 +243,31 @@ $ gem install awestruct --version 0.5.4.rc3
 $ gem install asciidoctor
 ----
 
+==== Gerando um snapshot do estado da VM
+[source,bash]
+----
+$ sudo shutdown -h now
+# Aguarde a VM ser reiniciada ...
+$ VBoxManage snapshot vm-fedora take awestruct-pos-install
+$ VBoxManage startvm vm-fedora
+----
+* Refaça o login pelo console da VM e execute:
+[source,bash]
+----
+$ !?nohup ssh
+$ logout
+----
+* Na console da base, execute:
+[source,bash]
+----
+$ !?ssh -p 2222
+$ !?tmux-view
+----
+
 ==== Criando um novo projeto
 [source,bash]
 ----
-$ mkdir $PROJECT
+$ mkdir -p $PROJECT
 $ cd !$
 $ awestruct -i -f foundation
 ----
@@ -280,15 +307,19 @@ $ rake
 === Acessando o site gerado na VM a partir da máquina base
 
 ==== Criando um túnel reverso da VM para a base
-* Digite <Ctrl b %> na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
+* Digite kbd:[Ctrl+b+"] na janela do tmux que está executando o rake. Isso abrirá um novo painel. Nesse painel, execute:
 [source,bash]
 ----
-$ autossh -M 0 -f -gNC -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" -R 4242:localhost:4242 $BASE_USER@base
+$ sudo yum -y install autossh
+$ autossh -M 0 -f -gNC \
+-o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
+-R 4242:localhost:4242 $BASE_USER@base
 ----
+* Feche o painel aberto digitando kbd:[Ctrl+d];
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
-* Volte para a janela que está executando o awestruct via rake (Digite <Ctrl b o> até posicionar nela). Dê um <Ctrl c> no servidor. Em seguida, execute:
+* Volte para a janela que está executando o awestruct via rake (Digite kbd:[Ctrl+b+o] até posicionar nela). Dê um kbd:[Ctrl+C] no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
@@ -377,8 +408,10 @@ EOF
 ----
 $ rake clean preview
 ----
+* Recarregue http://localhost:4242/ e observe as mudanças;
 
 ==== Configurando o uso do AsciiDoctor
+* Dê um kbd:[Ctrl+C] na janela que está executando o rake e execute:
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF
@@ -394,3 +427,116 @@ asciidoctor:
     icons: font
 EOF
 ----
+
+==== Criando a página about.adoc na pasta do projeto:
+[source,bash]
+----
+$ cat > about.adoc <<EOF
+= About http://joincommunity.com.br[{sitename}]
+$GITHUB_USER
+:page-layout: base
+:showtitle:
+
+[.lead]
+{sitename} is a cool event in http://j.mp/cade-goiania[Goiânia/GO/Brasil]! This site was founded by {author} and build by the execution of a https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc[step by step guide] created by http://paulojeronimo.info[Paulo Jerônimo]. It's quickly becoming much bigger than this humble beginning.
+
+This page is written in http://asciidoc.org[AsciiDoc].
+It's transformed by http://awestruct.org[Awestruct] and http://asciidoctor.org[Asciidoctor] into a webpage for this static website.
+EOF
+----
+
+==== Adicionando um link para a página about na barra de navegação:
+[source,bash]
+----
+$ sed -i '31 i \
+        %li.divider\
+          %li\
+            %a(href="#{site.ctx_path}/about.html") About\
+' _layouts/base.html.haml
+----
+
+==== Adicionando o estilo referenciando no documento (.lead)
+* Um pouco de http://tableless.com.br/sass-um-outro-metodo-de-escrever-css/[Sass]:
+[source,bash]
+----
+$ sed -i '$ a \
+.paragraph.lead > p {\
+  @extend %lead;\
+}\
+' stylesheets/app.scss
+$ rake
+----
+* Recarregue http://localhost:4242 e observe as mudanças;
+** Acesse o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
+* Pressione kbd:[Ctrl+C] no console do servidor;
+
+
+==== Observando as mudanças que precisam ser confirmadas e fazendo o commit
+[source,bash]
+----
+$ git status
+$ git commit . -m "novas funcionalidades"
+$ git push origin master
+----
+
+==== Criando o ramo de publicação (gh-pages)
+[source,bash]
+----
+$ git checkout --orphan gh-pages
+$ rm -rf *
+$ rm -rf .awestruct* .sass-* .gitignore .gitmodules
+$ git rm --cached *
+$ echo "GitHub Pages placeholder" > index.html
+$ git add index.html .nojekyll
+$ git commit -m "iniciando o ramo de publicação para o GitHub Pages"
+----
+
+==== Implantando o ramo de publicação
+[source,bash]
+----
+$ git push origin gh-pages
+----
+
+==== Visualizando o seu site 
+* Acesse (substituindo as variáveis pelos seus valores, obviamente): http://$GITHUB_USER.github.io/$PROJECT
+
+==== Retornando para o ramo master
+[source,bash]
+----
+$ git checkout master
+----
+
+==== Configurando o implantador do Awestruct para publicar o site no GitHub Pages
+[source,bash]
+----
+$ sed -i "$ a \
+profiles:\
+  development:\
+    deploy: nil\
+  production:\
+    base_url: http://$GITHUB_USER.github.io/$PROJECT\
+    ctx_path: /$PROJECT\
+    asciidoctor:\
+      :attributes:\
+        base_url: http://$GITHUB_USER.github.io/$PROJECT\
+        ctx_path: /$PROJECT\
+        imagesdir: http://$GITHUB_USER.github.io/$PROJECT/images\
+    deploy:\
+      host: github_pages\
+      branch: gh-pages\
+" _config/site.yml
+----
+
+==== Fazendo o commit da configuração
+[source,bash]
+----
+$ git commit _config/site.yml -m "adicionado o profile para implantação no GitHub Pages"
+$ git push origin master
+----
+
+==== Implantando no GitHub Pages
+[source,bash]
+----
+$ rake clean deploy
+----
+* Recarregue http://$GITHUB_USER.github.io/$PROJECT;
