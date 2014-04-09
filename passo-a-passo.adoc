@@ -230,8 +230,6 @@ $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
 ----
 
-<<<<<<< HEAD
-=======
 === Gerando um snapshot do estado da VM
 [source,bash]
 ----
@@ -259,7 +257,6 @@ $ !?ssh -p 2222
 $ !?tmux-view
 ----
 
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
 == Criando sites com Awestruct & Asciidoctor
 
 === Criando um novo site com o Awestruct
@@ -337,11 +334,7 @@ $ rake
 === Acessando o site gerado na VM a partir da máquina base
 
 ==== Criando um túnel reverso da VM para a base
-<<<<<<< HEAD
 * Digite kbd:[Ctrl+b+"] na janela do tmux que está executando o rake. Isso abrirá um novo painel. Nesse painel, execute:
-=======
-* Digite kbd:[Ctrl+b+%] na janela do tmux que está executando o rake. Isso abrirá um novo painel a sua direita. Nesse painel, execute:
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
 [source,bash]
 ----
 $ sudo yum -y install autossh
@@ -465,24 +458,14 @@ EOF
 ==== Criando a página about.adoc na pasta do projeto:
 [source,bash]
 ----
-<<<<<<< HEAD
 $ cat > about.adoc <<EOF
 = About http://joincommunity.com.br[{sitename}]
-=======
-$ cat >> about.adoc <<EOF
-= About {sitename}
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
 $GITHUB_USER
 :page-layout: base
 :showtitle:
 
 [.lead]
-<<<<<<< HEAD
 {sitename} is a cool event in http://j.mp/cade-goiania[Goiânia/GO/Brasil]! This site was founded by {author} and build by the execution of a https://github.com/paulojeronimo/join-community-2014/blob/master/passo-a-passo.adoc[step by step guide] created by http://paulojeronimo.info[Paulo Jerônimo]. It's quickly becoming much bigger than this humble beginning.
-=======
-{sitename} was founded by {author} during a conference workshop.
-It's quickly becoming much bigger than this humble beginning.
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
 
 This page is written in http://asciidoc.org[AsciiDoc].
 It's transformed by http://awestruct.org[Awestruct] and http://asciidoctor.org[Asciidoctor] into a webpage for this static website.
@@ -508,18 +491,11 @@ $ sed -i '$ a \
   @extend %lead;\
 }\
 ' stylesheets/app.scss
-<<<<<<< HEAD
 $ rake
 ----
 * Recarregue http://localhost:4242 e observe as mudanças;
 ** Acesse o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
-=======
-----
-* Recarregue a página http://localhost:4242
-** Acesse, nessa página, o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
 * Pressione kbd:[Ctrl+C] no console do servidor;
-
 
 ==== Observando as mudanças que precisam ser confirmadas e fazendo o commit
 [source,bash]
@@ -576,7 +552,6 @@ profiles:\
       branch: gh-pages\
 " _config/site.yml
 ----
-<<<<<<< HEAD
 
 ==== Fazendo o commit da configuração
 [source,bash]
@@ -592,4 +567,3 @@ $ rake clean deploy
 ----
 * Recarregue http://$GITHUB_USER.github.io/$PROJECT;
 =======
->>>>>>> 74288a73c117e85033e73b259a761ca4d7563d0a
