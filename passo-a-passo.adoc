@@ -68,8 +68,7 @@ $ logout
 [source,bash]
 ----
 $ for repo in fedora updates; \
-do sudo yum-config-manager --disable $repo; \
-done
+do sudo yum-config-manager --disable $repo; done
 $ sudo yum-config-manager --enable local-mirror-\*
 ----
 
@@ -230,7 +229,7 @@ $ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
 $ rvm list
 ----
 
-=== Gerando um snapshot do estado da VM
+=== Gerando um snapshot da VM
 [source,bash]
 ----
 $ sudo shutdown -h now
@@ -270,7 +269,7 @@ $ gem install awestruct --version 0.5.4.rc3
 $ gem install asciidoctor
 ----
 
-==== Gerando um snapshot do estado da VM
+==== Gerando outro snapshot da VM
 [source,bash]
 ----
 $ sudo shutdown -h now
@@ -341,12 +340,11 @@ $ sudo yum -y install autossh
 $ autossh -M 0 -f -gNC \
 -o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
 -R 4242:localhost:4242 $BASE_USER@base
+$ cd ~/$PROJECT
 ----
-* Feche o painel aberto digitando kbd:[Ctrl+d];
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
-* Volte para a janela que está executando o awestruct via rake (Digite kbd:[Ctrl+b+o] até posicionar nela). Dê um kbd:[Ctrl+C] no servidor. Em seguida, execute:
 [source,bash]
 ----
 $ tree _site/ | less
@@ -431,6 +429,7 @@ EOF
 ----
 
 ==== Limpando e regerando o site para ver as mudanças
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o rake e reinicie-o:
 [source,bash]
 ----
 $ rake clean preview
@@ -438,7 +437,6 @@ $ rake clean preview
 * Recarregue http://localhost:4242/ e observe as mudanças;
 
 ==== Configurando o uso do AsciiDoctor
-* Dê um kbd:[Ctrl+C] na janela que está executando o rake e execute:
 [source,bash]
 ----
 $ cat >> _config/site.yml <<EOF
@@ -506,7 +504,8 @@ $ rake
 [source,bash]
 ----
 $ git status
-$ git commit . -m "novas funcionalidades"
+$ git add .
+$ git commit -m "novas funcionalidades"
 $ git push origin master
 ----
 
@@ -530,6 +529,10 @@ $ git push origin gh-pages
 
 ==== Visualizando o seu site 
 * Acesse (substituindo as variáveis pelos seus valores, obviamente): http://$GITHUB_USER.github.io/$PROJECT
+[NOTE]
+------
+O GitHub Page demora cerca de 10 minutos até fazer a primeira disponiblização da página.
+------
 
 ==== Retornando para o ramo master
 [source,bash]
@@ -540,22 +543,22 @@ $ git checkout master
 ==== Configurando o implantador do Awestruct para publicar o site no GitHub Pages
 [source,bash]
 ----
-$ sed -i "$ a \
-profiles:\
-  development:\
-    deploy: nil\
-  production:\
-    base_url: http://$GITHUB_USER.github.io/$PROJECT\
-    ctx_path: /$PROJECT\
-    asciidoctor:\
-      :attributes:\
-        base_url: http://$GITHUB_USER.github.io/$PROJECT\
-        ctx_path: /$PROJECT\
-        imagesdir: http://$GITHUB_USER.github.io/$PROJECT/images\
-    deploy:\
-      host: github_pages\
-      branch: gh-pages\
-" _config/site.yml
+$ cat >> _config/site.yml <<EOF
+profiles:
+  development:
+    deploy: nil
+  production:
+    base_url: http://$GITHUB_USER.github.io/$PROJECT
+    ctx_path: /$PROJECT
+    asciidoctor:
+      :attributes:
+        base_url: http://$GITHUB_USER.github.io/$PROJECT
+        ctx_path: /$PROJECT
+        imagesdir: http://$GITHUB_USER.github.io/$PROJECT/images
+    deploy:
+      host: github_pages
+      branch: gh-pages
+EOF
 ----
 
 ==== Fazendo o commit da configuração
@@ -570,5 +573,5 @@ $ git push origin master
 ----
 $ rake clean deploy
 ----
-* Recarregue http://$GITHUB_USER.github.io/$PROJECT;
+* Recarregue http://$GITHUB_USER.github.io/$PROJECT
 =======
