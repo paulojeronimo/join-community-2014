@@ -103,11 +103,11 @@ yum-config-manager --disable local-mirror-\*
 
 # Pacotes (e grupos de pacotes) que devem ser instalados
 %packages
-@c-development
-@development-tools
+#@c-development
+#@development-tools
 yum-utils
-tmux
-lynx
-vim
-tree
+#tmux
+#lynx
+#vim
+#tree
 %end

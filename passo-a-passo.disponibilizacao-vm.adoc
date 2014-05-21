@@ -148,6 +148,12 @@ xargs rm -rf)
 $ 7za a -mmt -v200m vm-fedora vm-fedora/
 $ sha1sum vm-fedora.7z.* > vm-fedora.sha1sum
 ----
+=== Gerando o script para o download da VM
+[source,bash]
+----
+$ f=vm-fedora.download.sh; sed "s/COUNT/`ls vm-fedora.7z.* | wc -l`/g" \
+$DOWNLOADS_DIR/join-community-2014/vm/$f > $f
+----
 
 === Fazendo upload para o Google Drive
 * Montando o Google Drive:

@@ -72,12 +72,23 @@ do sudo yum-config-manager --disable $repo; done
 $ sudo yum-config-manager --enable local-mirror-\*
 ----
 
-=== Atualizando os pacotes da VM
+=== Atualizando a lista de pacotes da VM
 [source,bash]
 ----
 $ sudo yum -y update
 ----
 
+=== Instalando os pacotes básicos necessários para esse tutorial
+==== Instalando vim, tree, lynx, tmux, tar, ...
+[source,bash]
+----
+$ sudo yum -y install \
+vim-enhanced \
+tree \
+lynx \
+tmux \
+tar
+----
 === Visualizando o passo a passo pelo tmux
 [source,bash]
 ----
@@ -203,7 +214,7 @@ $ !?kill-session
 $ logout
 ----
 
-=== Instalando o Ruby 2.1.1, via RVM em modo multi-user, e tornando-o a versão default
+=== Instalando o Ruby 2.1.2, via RVM em modo multi-user, e tornando-o a versão default
 [source,bash]
 ----
 $ !?ssh -p 2222
@@ -211,10 +222,10 @@ $ !?tmux-view
 $ !?type
 $ which rvm
 $ ruby -v
-$ rvm install 2.1.1
+$ rvm install 2.1.2
 $ !-2
 $ rvm list
-$ rvm use 2.1.1 --default
+$ rvm use 2.1.2 --default
 $ !-2
 $ ruby -v
 ----
@@ -225,7 +236,7 @@ $ ruby -v
 $ rvm remove 1.9.3
 # Deverá dar erro pois o usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
 # Solução de contorno: fazer a remoção manual, como root:
-$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-p545/
+$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-*
 $ rvm list
 ----
 
@@ -262,7 +273,7 @@ $ !?tmux-view
 ==== Instalando o Awestruct
 [source,bash]
 ----
-$ rvm use 2.1.1@$PROJECT --create
+$ rvm use 2.1.2@$PROJECT --create
 $ sudo yum -y install libxml2-devel libxslt-devel
 $ gem install tilt --version 1.4.1
 $ gem install awestruct --version 0.5.4.rc3
