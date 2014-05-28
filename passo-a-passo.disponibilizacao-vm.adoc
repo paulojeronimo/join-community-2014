@@ -1,10 +1,10 @@
-= Criação e disponibilização de uma máquina virtual Fedora 20
+= Criação e disponibilização de uma máquina virtual (VM) mínima com o Fedora 20
 :author: Paulo Jerônimo
 :email: pj@paulojeronimo.info
 :toc:
 :numbered:
 
-== Preparando o ambiente Fedora para criar e disponibilizar a VM
+== Preparando um Fedora para criar e disponibilizar uma VM Fedora
 === Instalando alguns utilitários
 [source,bash]
 ----
@@ -14,13 +14,107 @@ p7zip
 ----
 
 === Instalando o Apache
-* Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc30
+* Instale, inicie e disponibilize a execução do Apache na inicialização da máquina:
+[source,bash]
+----
+$ sudo yum -y install httpd
+$ sudo systemctl start httpd
+$ sudo systemctl enable httpd
+----
+* Configure o firewall para possibilitar o acesso ao Apache:
+[source,bash]
+----
+$ sudo firewall-cmd --permanent --add-service=http
+----
+* Execute o comando a seguir observando sua saída. Ela apresenta algumas linhas relevantes da configuração atual:
+[source,bash]
+----
+$ sed -n '11,25p;31,35p' /etc/httpd/conf.d/userdir.conf
+----
+* Edite o arquivo a seguir, conforme a execução do sed e, em seguida, reexecute o comando anterior para conferir as alterações:
+[source,bash]
+----
+$ sudo sed -i '
+s/\(. *UserDir\) disabled/\1 public_html/g
+s/SymLinksIfOwnerMatch/FollowSymLinks/g
+' /etc/httpd/conf.d/userdir.conf
+----
+* Recarregue as configurações do Apache:
+[source,bash]
+----
+$ sudo systemctl reload httpd
+----
+* Ajuste e testes as permissões para o diretório $HOME, conforme a seguir:
+[source,bash]
+----
+$ sudo chmod 755 $HOME
+$ ls -ld $HOME
+----
+* Faça os ajustes necessários no SELinux:
+[source,bash]
+----
+$ sudo setsebool -P httpd_read_user_content 1
+$ sudo setsebool -P httpd_enable_homedirs 1
+----
+* Crie a pasta public_html e um arquivo index.html para validar o acesso via HTTP:
+[source,bash]
+----
+$ mkdir -p ~/public_html
+$ echo "Teste do $USER" > !$/index.html
+----
+* Abra o browser em http://localhost/~pj/ para verificar o acesso a página index.html; 
 
-=== Instalando o VirtualBox
-* Passo a passo em http://a.paulojeronimo.info/tutoriais/fedora-mac/index.html#toc31
-
-=== Instalando um cliente para o Google Drive
-* TODO
+=== Instalando o VirtualBox (versão 4.3.12)
+* Instale o repositório do VirtualBox para o Fedora, conforme a seguir:
+[source,bash]
+----
+$ sudo curl http://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo -o /etc/yum.repos.d/virtualbox.repo
+----
+* Instale os pacotes que serão utilizados na instalação do VirtualBox:
+[source,bash]
+----
+$ sudo yum -y group install c-development
+$ sudo yum -y install kernel-devel
+----
+* Instale o VirtualBox:
+[source,bash]
+----
+$ sudo yum -y install VirtualBox-4.3
+----
+* Verifique se foi criado o grupo vboxusers
+[source,bash]
+----
+$ grep vboxusers /etc/group
+----
+* Adicione seu usuário ao grupo vbox users e reexecute o comando anterior:
+[source,bash]
+----
+$ sudo gpasswd -a $USER vboxusers
+$ grep vboxusers /etc/group
+----
+* Execute o passo a seguir SE tiver ocorrido algum erro durante a instalação do VirtualBox OU se o kernel do Linux tiver sido atualizado:
+[source,bash]
+----
+$ sudo /etc/init.d/vboxdrv setup
+----
+* Faça o logout de seu usuário:
+[source,bash]
+----
+$ gnome-session-quit
+----
+* Instale o VirtualBox Extension Pack:
+[source,bash]
+----
+$ VER=4.3.12
+$ VEP=Oracle_VM_VirtualBox_Extension_Pack-$VER.vbox-extpack
+$ wget -c http://download.virtualbox.org/virtualbox/$VER/$VEP
+$ VBoxManage extpack install $VEP
+----
+* Logue-se novamente e inicie o VirtualBox:
+[source,bash]
+----
+$ VirtualBox
+----
 
 === Configurando variáveis de ambiente
 [source,bash]
@@ -51,7 +145,7 @@ $ source $f
 ----
 
 == Criando a VM
-=== Configurando o uso de um mirror local do Fedora 20
+=== Configurando o uso de um mirror local do Fedora
 [source,bash]
 ----
 $ mkdir -p $DOWNLOADS_DIR
@@ -78,7 +172,7 @@ $ git clone https://github.com/paulojeronimo/join-community-2014.git
 $ ./join-community-2014/configurar-apache.sh
 ----
 
-=== Criando, iniciando e instalando o Fedora 20 na VM
+=== Criando, iniciando e instalando o Fedorana VM
 [source,bash]
 ----
 $ ./mirrors/Fedora/20/x86_64/vm/vbox
@@ -155,11 +249,30 @@ $ f=vm-fedora.download.sh; sed "s/COUNT/`ls vm-fedora.7z.* | wc -l`/g" \
 $DOWNLOADS_DIR/join-community-2014/vm/$f > $f
 ----
 
+=== Instalando um cliente para o Google Drive
+[source,bash]
+----
+$ sudo yum install ocaml ocaml-camlp4-devel ocaml-ocamldoc
+$ mkdir ~/Projects/github.com/OCamlPro
+$ cd !$
+$ git clone https://github.com/OCamlPro/opam.git
+$ cd opam
+$ ./configure
+$ make
+$ sudo make install
+$ sudo yum install m4 fuse fuse-devel libcurl-devel libsqlite3x-devel zlib-devel
+$ opam init
+$ opam update
+$ opam install google-drive-ocamlfuse
+$ ~/.opam/system/bin/google-drive-ocamlfuse
+$ export PATH=~/.opam/system/bin:$PATH
+----
+
 === Fazendo upload para o Google Drive
 * Montando o Google Drive:
 [source,bash]
 ----
-$ mkdir ~/google-drive
+$ mkdir -p ~/google-drive
 $ google-drive-ocamlfuse ~/google-drive
 ----
 * Fazendo a cópia da VM:
@@ -174,7 +287,7 @@ $ fusermount -u ~/google-drive
 -----
 * Terminado o upload, os arquivos ficam disponíveis em http://gdriv.es/vm-fedora/. Essa é uma URL curta, que criei no http://gdriv.es, para a URL longa https://drive.google.com/folderview?id=0B_tTlCk55SmjZGlNckhCRldUUDQ.
 
-== Para reiniciar esse passo a passo
+== Para reiniciar a criação da VM
 [source,bash]
 ----
 $ sudo rm -rf /etc/httpd/conf.d/join-community-2014.conf 
@@ -183,4 +296,5 @@ $ rm -rf join-community-2014.*
 $ VBoxManage unregistervm vm-fedora --delete
 $ rm -rf ~/VirtualBox\ VMs/vm-fedora.7z.*
 $ sed -i '/join-community/d' ~/.bashrc
+$ exit
 ----
