@@ -116,6 +116,7 @@ $ VBoxManage extpack install $VEP
 $ VirtualBox
 ----
 
+== Criando a VM
 === Configurando variáveis de ambiente
 [source,bash]
 ----
@@ -144,7 +145,6 @@ echo "[ -f $f ] && source $f"  >> ~/.bashrc
 $ source $f
 ----
 
-== Criando a VM
 === Configurando o uso de um mirror local do Fedora
 [source,bash]
 ----
@@ -161,7 +161,7 @@ $ .bin/create-links
 === Criando e/ou atualizando o mirror local
 [source,bash]
 ----
-$ sudo Fedora/20/x86_64/mirror.sh
+$ Fedora/20/x86_64/mirror.sh
 ----
 
 === Configurando o Apache
