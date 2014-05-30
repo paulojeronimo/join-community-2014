@@ -208,11 +208,12 @@ $ rvm list known | grep 1.9
 $ rvm install 1.9.3
 $ ruby -v
 $ logout
-$ sudo userdel -rf rvmuser
 $ sudo gpasswd -a $USER rvm
 $ !?kill-session
 $ logout
 ----
+// Esse passo é executado (nos comandos acima) após o comando logout:
+// $ sudo userdel -rf rvmuser
 
 === Instalando o Ruby 2.1.2, via RVM em modo multi-user, e tornando-o a versão default
 [source,bash]
@@ -229,16 +230,16 @@ $ rvm use 2.1.2 --default
 $ !-2
 $ ruby -v
 ----
-
-=== Removendo o Ruby 1.9.3, via RVM
-[source,bash]
-----
-$ rvm remove 1.9.3
-# Deverá dar erro pois o usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
-# Solução de contorno: fazer a remoção manual, como root:
-$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-*
-$ rvm list
-----
+//
+//=== Removendo o Ruby 1.9.3, via RVM
+//[source,bash]
+//----
+//$ rvm remove 1.9.3
+//# Deverá dar erro pois o usuário aluno não tem privilégios para remover o diretório (criado por rvmuser)
+//# Solução de contorno: fazer a remoção manual, como root:
+//$ sudo rm -rf /usr/local/rvm/rubies/ruby-1.9.3-*
+//$ rvm list
+//----
 
 === Gerando um snapshot da VM
 [source,bash]
@@ -306,6 +307,7 @@ $ !?tmux-view
 ----
 $ mkdir -p $PROJECT
 $ cd !$
+$ rvm use 2.1.2@$PROJECT
 $ awestruct -i -f foundation
 ----
 
@@ -363,9 +365,10 @@ $ tree _site/ | less
 
 === Iniciando o uso do Git para o controle de versões do site
 
-==== Configurando o Git
+==== Instalando e configurando o Git
 [source,bash]
 ----
+$ sudo yum -y install git
 $ git config --global user.email "$GITHUB_EMAIL"
 $ git config --global user.name "$GITHUB_NAME"
 $ cat ~/.gitconfig
@@ -406,6 +409,8 @@ $ git commit -m 'commit inicial'
 === Enviando o site para o GitHub
 
 ==== Criando um repositório remoto no GitHub
+* Abra o site do GitHub e crei um repositório nomeado 'join-community' em tua conta.
+* Informe na descrição: 'Execução do tutorial de AweStruct ministrado por Paulo Jerônimo no Join Community 2014'.
 
 ==== Publicando seu repositório local no GitHub
 [source,bash]
@@ -505,9 +510,14 @@ $ sed -i '$ a \
   @extend %lead;\
 }\
 ' stylesheets/app.scss
-$ rake
 ----
 * Recarregue http://localhost:4242 e observe as mudanças;
+* Pressione kbd:[Ctrl+C] no console do servidor;
+* Reinicie o servidor executando
+[source,bash]
+----
+$ rake
+----
 ** Acesse o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
 * Pressione kbd:[Ctrl+C] no console do servidor;
 
@@ -542,7 +552,7 @@ $ git push origin gh-pages
 * Acesse (substituindo as variáveis pelos seus valores, obviamente): http://$GITHUB_USER.github.io/$PROJECT
 [NOTE]
 ------
-O GitHub Page demora cerca de 10 minutos até fazer a primeira disponiblização da página.
+O GitHub Pages pode demorar até 10 minutos para fazer a primeira disponiblização do site.
 ------
 
 ==== Retornando para o ramo master
