@@ -268,25 +268,112 @@ $ !?ssh -p 2222
 $ !?tmux-view
 ----
 
-== Criando sites com Awestruct & Asciidoctor
+== Baixando, gerando e entendendo alguns sites desenvolvidos com Awestruct & Asciidoctor
 
-=== Criando um novo site com o Awestruct
-==== Instalando o Awestruct
+=== Instalando o Git
 [source,bash]
 ----
-$ rvm use 2.1.2@$PROJECT --create
-$ sudo yum -y install libxml2-devel libxslt-devel
-$ gem install tilt --version 1.4.1
-$ gem install awestruct --version 0.5.4.rc3
-$ gem install asciidoctor
+$ sudo yum -y install git
 ----
 
-==== Gerando outro snapshot da VM
+=== Criando um túnel reverso, da VM para a base, para acesso a porta 4242
+[source,bash]
+----
+$ sudo yum -y install autossh
+$ autossh -M 0 -f -gNC \
+-o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
+-R 4242:localhost:4242 $BASE_USER@base
+$ ps -ef | grep autossh
+----
+
+=== Gerando (localmente) o site pessoal de Emmanuel Bernard 
+* http://emmanuelbernard.com
+
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/emmanuelbernard
+$ cd !$
+$ git clone https://github.com/emmanuelbernard/emmanuelbernard.com
+$ cd emmanuelbernard.com
+$ cat > .ruby-version <<EOF
+1.9.3
+EOF
+$ cat > .ruby-gemset <<EOF
+awestruct
+EOF
+$ cd ..
+$ cd -
+$ bundle install
+$ bundle exec awestruct -d
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando (localmente) o site do projeto Hibernate
+* http://hibernate.org
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/hibernate
+$ cd !$
+$ git clone https://github.com/hibernate/hibernate.org
+$ cd hibernate.org
+$ cat > .ruby-version <<EOF
+1.9.3
+EOF
+$ cat > .ruby-gemset <<EOF
+awestruct
+EOF
+$ cd ..
+$ cd -
+$ bundle install
+$ rake
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando (localmente) o site do projeto WildFly
+* http://wildfly.org
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/wildfly
+$ cd !$
+$ git clone https://github.com/wildfly/wildfly.org
+$ cd wildfly.org
+$ cat > .ruby-version <<EOF
+1.9.3
+EOF
+$ cat > .ruby-gemset <<EOF
+awestruct
+EOF
+$ cd ..
+$ cd -
+$ bundle install
+$ sudo yum -y install wget
+$ rake
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando (localmente) o site do projeto AsciiDoctor
+* http://asciidoctor.org
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/asciidoctor
+$ cd !$
+$ git clone https://github.com/asciidoctor/asciidoctor.org
+$ cd asciidoctor.org
+$ bundle install
+$ rake
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando outro snapshot da VM e reiniciando
 [source,bash]
 ----
 $ sudo shutdown -h now
 # Aguarde a VM ser reiniciada ...
-$ VBoxManage snapshot vm-fedora take awestruct-pos-install
+$ VBoxManage snapshot vm-fedora take exemplos-pos-install
 $ VBoxManage startvm vm-fedora
 ----
 * Refaça o login pelo console da VM e execute:
@@ -300,6 +387,19 @@ $ logout
 ----
 $ !?ssh -p 2222
 $ !?tmux-view
+----
+
+== Criando sites com Awestruct & Asciidoctor
+
+=== Criando um novo site com o Awestruct
+==== Instalando o Awestruct
+[source,bash]
+----
+$ rvm use 2.1.2@$PROJECT --create
+$ sudo yum -y install libxml2-devel libxslt-devel
+$ gem install tilt --version 1.4.1
+$ gem install awestruct --version 0.5.4.rc3
+$ gem install asciidoctor
 ----
 
 ==== Criando um novo projeto
@@ -345,16 +445,6 @@ $ rake
 
 === Acessando o site gerado na VM a partir da máquina base
 
-==== Criando um túnel reverso da VM para a base
-* Digite kbd:[Ctrl+b+"] na janela do tmux que está executando o rake. Isso abrirá um novo painel. Nesse painel, execute:
-[source,bash]
-----
-$ sudo yum -y install autossh
-$ autossh -M 0 -f -gNC \
--o "ServerAliveInterval 60" -o "ServerAliveCountMax 3" \
--R 4242:localhost:4242 $BASE_USER@base
-$ cd ~/$PROJECT
-----
 * Abra seu browser na máquina base no endereço http://localhost:4242
 
 ==== Observando a estrutura do site gerado
@@ -365,10 +455,9 @@ $ tree _site/ | less
 
 === Iniciando o uso do Git para o controle de versões do site
 
-==== Instalando e configurando o Git
+==== Configurando o Git com tuas informações
 [source,bash]
 ----
-$ sudo yum -y install git
 $ git config --global user.email "$GITHUB_EMAIL"
 $ git config --global user.name "$GITHUB_NAME"
 $ cat ~/.gitconfig
@@ -518,7 +607,7 @@ $ sed -i '$ a \
 ----
 $ rake
 ----
-** Acesse o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
+* Acesse o link http://localhost:4242/about.html[About] (canto lateral esquerdo).
 * Pressione kbd:[Ctrl+C] no console do servidor;
 
 ==== Observando as mudanças que precisam ser confirmadas e fazendo o commit
