@@ -28,7 +28,7 @@ O Awestruct é um framework para a criação de sites HTML estáticos. Ele é in
 
 * Sites de projetos:
 ** É claro que o https://github.com/awestruct/awestruct.org[código do site do projeto Awestruct] está disponível no GitHub e é desenvolvido utilizando o próprio Awestruct;
-** O http://asciidoctor.org[site do projeto Asciidoctor] também é escrito com o Awestruct (obviamente no formato AsciiDoc) e https://github.com/paulojeronimo/asciidoctor.org[seu código] está disponível no GitHub.
+** O http://asciidoctor.org[site do projeto Asciidoctor] também é escrito com o Awestruct (obviamente no formato AsciiDoc) e https://github.com/asciidoctor/asciidoctor.org[seu código] está disponível no GitHub.
 ** O site do http://wildfly.org[WildFly], a nova versão do servidor de aplicações JBoss, também é escrito com o Awestruct e https://github.com/wildfly/wildfly.org[seu código] está disponível no GitHub;
 ** O http://hibernate.org[Hibernate], um framework popular para mapeamento de objetos para bancos de dados relacionais, também é escrito com o Awestruct e https://github.com/hibernate/hibernate.org[seu código] está disponível no GitHub;
 ** O http://arquillian.org[Arquillian] é um framework para testes de aplicações Java EE. Seu site é frequentemente atualizado por vários participantes do projeto, de forma colaborativa, e https://github.com/arquillian/arquillian.github.com[seu código] está disponível no GitHub;

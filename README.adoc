@@ -53,6 +53,8 @@ Baixei e compilei o projeto https://github.com/melix/deck2pdf[deck2pdf] para faz
 [source,bash]
 ----
 $ pushd ~/Projects/github.com/
+$ mkdir melix
+$ cd !$
 $ git clone https://github.com/melix/deck2pdf.git
 $ pushd deck2pdf/
 ----

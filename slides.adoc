@@ -2,38 +2,276 @@
 Paulo Jerônimo; @paulojeronimo
 include::attributes.adoc[]
 
-:experimental:
-:toc2:
-:sectanchors:
-:idprefix:
-:idseparator: -
-:icons: font
-:dzslides-transition: fade
-:source-highlighter: coderay
+[.topic.source]
+== Agenda
+* http://www.methods.co.nz/asciidoc/[AsciiDoc], http://asciidoctor.org[Asciidoctor]
+** O que são? Quem utiliza?
+* http://awestruct.org[Awestruct]
+** O que é? Quem utiliza? Similares?
+* Tutoriais (passo a passo) e demonstrações
+** Da criação de uma VM contendo as ferramentas necessárias, passando pela
+** Demonstração do processo de contrução de alguns sites reais e conhecidos, até o
+** Desenvolvimento e a publicação de um novo site no https://pages.github.com/[GitHub Pages]
+
+[.topic.source]
+== Pré-requisitos
+* Nessa apresentação, estou assumindo que você
+* Possua alguma experiência em
+** Git/GitHub
+** HTML, CSS, JavaScript
+* Está interessado em produzir documentos
+** Posts num blog, artigos, livros, ...
+* E/ou quer/precisa desenvolver um site estático
+** Um site pessoal ou de um projeto, um blog, ...
+
+[.topic.source]
+== Pré-requisitos
+* Para isso, está buscando
+** Simplicidade
+** Rapidez
+** Baixo custo para hospedar um site (zero (0), de preferência)
+
+[.topic.source]
+== O material dessa apresentação
+* Contempla estes slides (link:./slides.adoc[Código fonte])
+** Gerados em formato HTML, com o Asciidoctor
+*** E também em formato PDF, seguindo os procedimentos descritos link:./README.adoc[aqui]
+* E mais dois (2) tutoriais:
+** link:./passo-a-passo.disponibilizacao-vm.adoc[Criação e disponibilização de uma máquina virtual (VM) mínima]
+*** Executada pelo VirtualBox e rodando o Fedora 20
+** link:./passo-a-passo.adoc[Passo a passo completo para a criação de um site estático]
+*** Da instalação das ferramentas até a publicação de um site no GitHub Pages
+* Está disponível em
+** https://github.com/paulojeronimo/join-community-2014
+
+[.topic.intro]
+== AsciiDoc
+
+[.topic.source]
+== AsciiDoc - o que é?
+* É um formato de documento
+** Assemelha-se a um http://pt.wikipedia.org/wiki/Wiki[Wiki]
+* Muito menos verboso que XML
+** XML foi feito para máquinas escreverem (não para humanos!)
+* Evita as distrações (e a briga) com os editores do tipo WYSIWYG
+** Já percebeu o quanto tempo você perde formatando um documento?
+* Permite a escrita de notas, artigos, livros (de romances até científicos, matemáticos), páginas web, slides, posts de blogs, páginas man, ...
+
+[.topic.source]
+== AsciiDoc - o que é?
+* Converte um documento escrito em texto puro para outros formatos: HTML, http://www.docbook.org/[DocBook], PDF, http://pt.wikipedia.org/wiki/EPUB[ePub]
+* No início, esse formato havia sido criado para ser um sucessor do DocBook
+* Ferramenta 'open source'
+** Escrita em Python
+* Site: http://www.methods.co.nz/asciidoc/
+
+[.topic.source]
+== AsciiDoc - quem utiliza?
+* Eu o descobri em 2012
+** Enquanto estudava a aplicação http://www.jboss.org/ticket-monster[Ticket Monster]. (https://github.com/jboss/ticket-monster-tutorial[Código fonte, na época])
+** E também um http://mojavelinux.github.io/asciidoc-examples/javaeeworkshop.html[tutorial de Java EE 6], escrito por https://twitter.com/mojavelinux[Dan Allen]
+** https://plus.google.com/114112334290393746697/posts/CdXJt6hVn5A[Isto foi o que o Dan Allen publicou no Google +, na época, sobre o AsciiDoc]
+
+[.topic.source]
+== AsciiDoc - quem utiliza?
+* Exemplos de livros e docs já produzidos com o AsciiDoc
+** http://practicalunittesting.com/[Practical Unit Testing]
+** http://shop.oreilly.com/product/0636920010258.do[Programming iOS 4] (O'Reilly)
+*** O autor http://www.apeth.net/matt/iosbooktoolchain.html[comenta sobre o processo de editoração da O'Reilly e o uso do AsciiDoc em seu livro]
+** http://shop.oreilly.com/product/9780596155964.do[Programming Scala] (O'Reilly)
+** https://www.kernel.org/pub/software/scm/git/docs/user-manual.html[Git User Manual] (https://github.com/git/git/tree/master/Documentation[Código fonte])
+** http://www-cs-students.stanford.edu/~blynn/gitmagic/[Git Magic]
+*** (Com http://www-cs-students.stanford.edu/~blynn/gitmagic/intl/pt_br/[tradução para o português do Brasil])
+* Mais http://www.methods.co.nz/asciidoc/index.html#X6[livros são listados no site do AsciiDoc]
+
+[.topic.source]
+== AsciiDoc - quem utiliza?
+* Exemplos de casos no Brasil
+** Vários http://producao.virtual.ufpb.br/books/[livros produzidos] por professores da http://www.ufpb.br/[UFPB]
+*** Para o curso http://portal.virtual.ufpb.br/wordpress/cursos/computacao/[Licenciatura em Computação a Distância]. Exemplos:
+**** http://producao.virtual.ufpb.br/books/edusantana/estatistica-livro/livro/livro.pdf[Probabilidade e Estatística] (https://github.com/edusantana/estatistica-livro[Código fonte])
+**** http://producao.virtual.ufpb.br/books/edusantana/matematica-elementar-livro/livro/livro.pdf[Matemática Elementar] (https://github.com/edusantana/matematica-elementar-livro[Código fonte])
+*** Utilizando um http://producao.virtual.ufpb.br/books/edusantana/producao-computacao-ead-ufpb/livro/livro.chunked/index.html[processo criado] por http://github.com/edusantana[Eduardo Santana]
+**** Todo o código desses livros fica disponíveis no GitHub
+** O livro https://bitbucket.org/berlotto/archlinux-book/downloads/livro.pdf["Utilizando o ArchLinux no Desktop"] (https://bitbucket.org/berlotto/archlinux-book/wiki/Home[Código fonte])
+*** Autoria de https://twitter.com/berlottocdd[Sérgio Berlotto] 
+** O livro http://producao.virtual.ufpb.br/books/paulojeronimo/livro-ironman/livro/livro.pdf["Ironman - Pensamentos e Atitudes"] '(em construção)'
+*** De minha autoria ;)
+*** Seguindo o processo criado para a UFPB
+*** (https://github.com/paulojeronimo/livro-ironman[Código fonte])
+
+[.topic.intro]
+== Asciidoctor
+
+[.topic.source]
+== Asciidoctor - o que é?
+* Outra ferramenta 'open source' p/ processar AsciiDoc
+** Escrita em Ruby
+* Site: http://asciidoctor.org
+* Concebido por https://twitter.com/mojavelinux[Dan Allen] (Red Hat)
+** https://community.redhat.com/blog/2013/04/introducing-asciidoctor-a-text-processor-and-publishing-toolchain/[Introducing AsciiDoctor, a text processor and publishing toolchain]
+* Possui plugins http://asciidoctor.org/docs/install-and-use-asciidoctor-maven-plugin/[Maven] e http://asciidoctor.org/docs/install-and-use-asciidoctor-gradle-plugin/[Gradle] para automação
+
+[.topic.source]
+== Asciidoctor - quem utiliza?
+* Praticamente, todos os documentos processados com AsciiDoc também podem com o Asciidoctor
+** Em alguns casos, com algumas adaptações ...
+* O http://github.com[GitHub] - todos os docs AsciiDoc dos repositórios são processados pelo Asciidoctor
+
+[.topic.source]
+== Asciidoctor - quem utiliza?
+* Exemplos de livros e docs já produzidos com o Asciidoctor
+** O livro http://booksite.continuousdev.org/[Continuous Enterprise Development in Java] (O'Reilly) (https://github.com/ALRubinger/continuous-enterprise-development[Código fonte])
+*** Dos autores https://twitter.com/ALRubinger[Andrew Lee Rubinger] e https://twitter.com/aslakknutsen[Aslak Knutsen] (Red Hat)
+** O livro http://enterprisewebbook.com/[Enterprise Web Development: From Desktop to Mobile] (O'Reilly) (https://github.com/Farata/EnterpriseWebBook[Código fonte])
+*** Dos autores Yakov Fain, Victor Rasputnis, Viktor Gamov, e Anatole Tartakovsky
+//** O livro http://vladmihalcea.com/2014/01/01/my-open-book-movement/[Unfolding Java Transactions] (https://github.com/vladmihalcea/unfolding-java-transactions[Código fonte])
+//*** Do autor https://twitter.com/vlad_mihalcea[Vlad Mihalcea]
+
+[.topic.source]
+== Asciidoctor - quem utiliza?
+* Exemplos de livros e docs já produzidos com o Asciidoctor
+** O http://tomee.apache.org/refcard/refcard.html[TommEE RefCard] (http://svn.apache.org/repos/asf/tomee/site/trunk/generators/tomee-refcard/[Código fonte]) (http://rmannibucau.wordpress.com/2013/06/18/asciidoctor-to-create-refcards/[Detalhes])
+** A documentação do projeto RichFaces (https://github.com/richfaces/richfaces-docs[Código fonte]) (http://www.bleathem.ca/blog/2013/06/richfaces-moves-to-asciidoc.html[Detalhes])
+** A http://docs.spring.io/spring/docs/4.0.0.BUILD-SNAPSHOT/spring-framework-reference/[documentação de referência do Spring Framework] (https://github.com/spring-projects/spring-framework/blob/master/CONTRIBUTING-DOCUMENTATION.adoc[Detalhes])
+* Mais http://asciidoctor.org/docs/what-is-asciidoc/#who-s-using-asciidoc[livros e docs são listados no site do Asciidoctor]
+
+[.topic.source]
+== Asciidoctor - quem utiliza?
+* Exemplos de slides já produzidas com o Asciidoctor
+** http://mojavelinux.github.io/decks/asciidoc-with-pleasure/rwx2012/index.html[Drop the angled brackets. Write (Ascii)Docs with pleasure!] https://github.com/mojavelinux/decks/blob/master/asciidoc-with-pleasure/slides.asciidoc[(source)]
+** http://mojavelinux.github.io/decks/docs-workshop/rwx2013/index.html[Easier Documentation, Simpler Websites and Faster Collaboration]
+** http://mojavelinux.github.io/decks/discover-zen-writing-asciidoc/rwx2013/index.html[Discover the ☯ of ✍ (Ascii)Docs] https://github.com/mojavelinux/decks/blob/master/discover-zen-writing-asciidoc-lightning/slides-rwx2013.adoc[(source)]
+** http://htmlpreview.github.io/?https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.html[What's new in WildFly 8?] https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.adoc[(source)] https://github.com/arun-gupta/wildfly-deck/blob/master/deck/slides.pdf?raw=true[(pdf)]
+
+[.topic.intro]
+== Awestruct
+
+[.topic.source]
+== Awestruct - o que é?
+* É um framework para a construção de sites estáticos 'open source'
+** Escrito em Ruby
+* Site: http://awestruct.org
+* Suporta o uso de AsciiDoc
+* Concebido por https://twitter.com/bobmcwhirter[Bob McWhirter] (Red Hat)
+** Com https://github.com/awestruct/awestruct/[contribuições e envolvimento de mais de 30 pessoas]
+*** Jason Porter, Aslak Nutsen, Emmanuel Bernard, Dan Allen, ...
+
+[.topic.source]
+== Awestruct - quem utiliza?
+* Exemplos de sites de projetos
+** http://asciidoctor.org (https://github.com/asciidoctor/asciidoctor.org[Código fonte])
+** http://cdi-spec.org (https://github.com/cdi-spec/cdi-spec.org[Código fonte])
+** http://wildfly.org (https://github.com/wildfly/wildfly.org[Código fonte])
+** http://hibernate.org (https://github.com/hibernate/hibernate.org[Código fonte])
+** http://arquillian.org (https://github.com/arquillian/arquillian.github.com[Código fonte])
+** http://torquebox.org (https://github.com/torquebox/torquebox.org[Código fonte])
+** http://ceylon-lang.org (https://github.com/ceylon/ceylon-lang.org[Código fonte])
+** http://infinispan.org (https://github.com/infinispan/infinispan.github.io[Código fonte])
+* O próprio http://awestruct.org, é claro! =) (https://github.com/awestruct/awestruct.org[Código fonte])
+
+[.topic.source]
+== Awestruct - quem utiliza?
+* Exemplos de sites pessoais 
+** Bob McWhirter - http://bob.mcwhirter.org (https://github.com/bobmcwhirter/bob.mcwhirter.org/[Código fonte])
+** Emmanuel Bernard - http://emmanuelbernard.com (https://github.com/emmanuelbernard/emmanuelbernard.com[Código fonte])
+** Maxime Gréau - http://mgreau.com (https://github.com/mgreau/mgreau.github.io[Código fonte])
+** Jason Lee - http://steeplesoft.com (https://bitbucket.org/jdlee/steeplesoft-blog[Código fonte])
+* Outros exemplos interessantes
+** http://www.schabell.org/2013/09/openshift-primer-hosting-awestruct-presos-in-cloud.html[OpenShift Primer - an example for hosting your awestruct presentations in the cloud]
+
+[.topic.source]
+== Awestruct - similares?
+* Em Ruby: http://jekyllrb.com/[Jekkyl], http://middlemanapp.com/[Middleman], https://www.ruby-toolbox.com/categories/static_website_generation[...]
+* Em Python: http://blog.getpelican.com/[Pelican]
+** Meu amigo https://github.com/magnunleno[Magnun Leno] utiliza-o em seu site pessoal (http://mindbending.org)
+* Em Haskell: http://jaspervdj.be/hakyll/[Hakyll]
+* NodeJS: http://hexo.io[Hexo]
+* ...
+* Veja https://iwantmyname.com/blog/2014/05/the-updated-big-list-of-static-website-generators-for-your-site-blog-or-wiki.html[uma lista mais completa]
+
+[.topic.intro]
+== Tutorial 1
+
+[.topic.source]
+== Criação e disponibilização de uma máquina virtual (VM) mínima
+* Este tutorial 
+** Explica, passo a passo
+*** Como é criada uma VM mínima, executando o http://fedoraproject.org[Fedora 20]
+**** Serve a todas atividades de demonstração dessa apresentação
+** É opcional!
+*** Siga direto para o tutorial 2 se não quiser detalhes sobre esse assunto
+** Foi preparado p/ execução num Fedora 20. O uso de outras distros Linux ou do OS X são possibilidades (não documentadas)
+* Motivação
+** Uma VM com o Fedora 20 contempla as últimas versões das ferramentas discutidas nessa apresentação
+** Essa VM é leve e exige poucos recursos da máquina HOST
+*** 5 GB de espaço livre no HD, 1 GB de memória RAM, acesso a Internet
+
+[.topic.source]
+== Criação e disponibilização de uma máquina virtual (VM) mínima
+* Tópicos
+** Preparando um Fedora para criar e disponibilizar uma VM Fedora
+** Criando a VM
+** Disponibilizando a VM para download
+** Para reiniciar a criação da VM
+* link:./passo-a-passo.disponibilizacao-vm.adoc[Link para o tutorial]
+
+[.topic.intro]
+== Tutorial 2
+
+[.topic.source]
+== Passo a passo completo para a criação de um site estático
+* Este tutorial
+** Explica, passo a passo
+*** Como são instaladas e utilizadas as ferramentas dessa apresentação
+**** Para a geração de alguns sites conhecidos
+**** Para a construção e geração de um site, do zero até a sua implantação no GitHub Pages
+** Utiliza a VM criada no tutorial 1
+** Pode ser executado
+*** No Linux
+*** No OS X
+*** E até mesmo no "Janelas" (bleah!!! :P)
+**** Nesse caso, você precisará do http://cygwin.com[Cygwin] instalado
+
+[.topic.source]
+== Passo a passo completo para a criação de um site estático
+* Tópicos 
+** Instalando a VM
+** Executando e configurando a VM
+** Instalando o Ruby via RVM
+** Baixando, gerando e entendendo alguns sites desenvolvidos com Awestruct & Asciidoctor
+** Criando sites com Awestruct & Asciidoctor
+* link:./passo-a-passo.adoc[Link para o tutorial]
+
+
+[.topic.intro]
+== Paulo Jerônimo
 
 [.topic.source]
 == Paulo Jerônimo
+* Desenvolvedor, autor de cursos e materiais instrucionais
+** Linux, http://a.paulojeronimo.info/cursos/git/index.html[Git/GitHub], Java EE, https://www.youtube.com/watch?v=mVZTW9b_LT0[JBoss em Produção], WildFly
+** Sites (em https://github.com/paulojeronimo/join-community-2014/blob/master/submissao.adoc[processo de migração] p/ o https://pages.github.com/[GitHub Pages])
+*** http://paulojeronimo.info - os novos conteúdos serão apenas em inglês
+*** http://ladoservidor.com - conteúdos em português. Você poderá contribuir!
+* Atualmente, analista de suporte na empresa http://mais2x.com.br/[+2X], em Brasília/DF
+** Suporte a JBoss em produção na Caixa Econômica Federal
+** Histórico profissional: http://j.mp/curriculopj
 
-====
-* Autor de cursos e materiais instrucionais:
-** Linux, Java EE, http://j.mp/jboss-em-producao[JBoss em Produção], WildFly;
-** Site atual: http://paulojeronimo.info;
-** Blog (antigo, não atualizável, mantido apenas por razões históricas): http://ladoservidor.com;
-* Analista de suporte na empresa http://mais2x.com.br/[+2X]:
-** Atualmente, suportando ambiente JBoss em produção na Caixa Econômica Federal;
+[.topic.source]
+== Paulo Jerônimo
 * Triatleta, Ironman:
-** Próximo (2º): 29/Jun/2014 - Nice/França;
-** Natação/Ciclismo/Corrida: 3,8/180/42,195 Km; Prazo: 17 horas;
-====
+** Próximo (2º): 29/Jun/2014
+** http://ironmannice.com
+** Natação/Ciclismo/Corrida: 3,8/180/42,195 Km; Prazo: 16 horas
+* Tentando conseguir alguma prioridade para o desenvolvimento de um produto para atletas e treinadores:
+** http://a.paulojeronimo.info/3plans/docs/index.html
 
-[NOTE ]
+[NOTE]
 [role="speaker"]
 ====
 * Sempre me perguntam sobre as distâncias de um Ironman. Então, é melhor deixá-las escritas! :D
 ====
-
-[.topic.intro]
-== Slides em construção!
 
 [.topic.ending, hrole="name"]
 == Paulo Jerônimo
