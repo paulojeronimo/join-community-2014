@@ -325,6 +325,31 @@ awestruct
 EOF
 $ cd ..
 $ cd -
+$ # libs necessárias para a instalação do gem nokogiri:
+$ sudo yum -y install libxml2-devel libxslt-devel
+$ bundle install
+$ sudo yum -y install wget
+$ rake
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando (localmente) o site do projeto Ceylon
+* http://ceylon.org
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/ceylon
+$ cd !$
+$ git clone https://github.com/ceylon/ceylon-lang.org
+$ cd ceylon-lang.org
+$ cat > .ruby-version <<EOF
+1.9.3
+EOF
+$ cat > .ruby-gemset <<EOF
+awestruct
+EOF
+$ cd ..
+$ cd -
 $ bundle install
 $ rake
 ----
@@ -348,7 +373,6 @@ EOF
 $ cd ..
 $ cd -
 $ bundle install
-$ sudo yum -y install wget
 $ rake
 ----
 * Navegue pelo site gerado em http://localhost:4242.
@@ -362,6 +386,28 @@ $ cd && mkdir -p ~/exemplos/github.com/asciidoctor
 $ cd !$
 $ git clone https://github.com/asciidoctor/asciidoctor.org
 $ cd asciidoctor.org
+$ bundle install
+$ rake
+----
+* Navegue pelo site gerado em http://localhost:4242.
+* Dê um kbd:[Ctrl+C] no painel em que está sendo executado o servidor.
+
+=== Gerando (localmente) o site do projeto CDI
+* http://cdi-spec.org
+[source,bash]
+----
+$ cd && mkdir -p ~/exemplos/github.com/cdi-spec
+$ cd !$
+$ git clone https://github.com/cdi-spec/cdi-spec.org
+$ cd cdi-spec.org
+$ cat > .ruby-version <<EOF
+2.1.2
+EOF
+$ cat > .ruby-gemset <<EOF
+`basename $PWD`
+EOF
+$ cd ..
+$ cd -
 $ bundle install
 $ rake
 ----
@@ -396,7 +442,6 @@ $ !?tmux-view
 [source,bash]
 ----
 $ rvm use 2.1.2@$PROJECT --create
-$ sudo yum -y install libxml2-devel libxslt-devel
 $ gem install tilt --version 1.4.1
 $ gem install awestruct --version 0.5.4.rc3
 $ gem install asciidoctor
